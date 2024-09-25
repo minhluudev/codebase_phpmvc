@@ -1,0 +1,16 @@
+{
+  "name": "minh/php-mvc",
+  "description": "Build a PHP MVC Framework From Scratch",
+  "autoload": {
+    "psr-4": {
+      "app\\": "./"
+    }
+  },
+  "authors": [
+    {
+      "name": "Minh Luu",
+      "email": "minhluuth@gmail.com"
+    }
+  ],
+  "require": {}
+}
