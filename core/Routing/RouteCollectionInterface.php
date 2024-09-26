@@ -20,7 +20,6 @@ interface RouteCollectionInterface
 	 */
 	public static function post($path, $callback);
 
-
 	/**
 	 * Group path url
 	 * @param mixed $path

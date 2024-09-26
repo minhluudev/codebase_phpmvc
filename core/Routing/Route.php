@@ -20,14 +20,14 @@ class Route implements RouteCollectionInterface
 
 	public static function get($path, $callback)
 	{
-		$newPath = self::$groupName  . $path;
-		self::$routes['get'][$newPath] = $callback;
+		$pathConvert = trim(self::$groupName  . $path, '/');
+		self::$routes['get'][$pathConvert] = $callback;
 	}
 
 	public static function post($path, $callback)
 	{
-		$newPath = self::$groupName . $path;
-		self::$routes['post'][$newPath] = $callback;
+		$pathConvert = trim(self::$groupName  . $path, '/');
+		self::$routes['post'][$pathConvert] = $callback;
 	}
 
 	public static function group($path, $callback)
@@ -43,7 +43,6 @@ class Route implements RouteCollectionInterface
 		$method = self::$request->method();
 		$path = self::$request->getPath();
 		$callback = self::$routes[$method][$path];
-
 		if (!$callback) {
 			$dataMapped = self::mapRouteData(self::$routes[$method], 	$path);
 			if ($dataMapped) {
