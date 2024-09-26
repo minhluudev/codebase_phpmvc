@@ -4,11 +4,9 @@ use app\core\Routing\Route;
 
 
 Route::group('product', function () {
-	Route::get('list', function () {
-		echo "Product list";
-	});
+	Route::get('list', function () {});
 
-	Route::get(':id', function ($id = '') {
-		echo "Product detail";
+	Route::get(':id', function ($id) {
+		echo "Product detail: " . $id;
 	});
 });

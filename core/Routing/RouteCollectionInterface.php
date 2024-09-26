@@ -28,10 +28,4 @@ interface RouteCollectionInterface
 	 * @return void
 	 */
 	public static function group($path, $callback);
-
-	/**
-	 * Resolve request
-	 * @return void
-	 */
-	public static function resolve();
 }

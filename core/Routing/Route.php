@@ -44,16 +44,72 @@ class Route implements RouteCollectionInterface
 		$path = self::$request->getPath();
 		$callback = self::$routes[$method][$path];
 		if (!$callback) {
-			echo 404;
-			exit;
+			$dataMapped = self::mapRouteData(self::$routes[$method], 	$path);
+			if ($dataMapped) {
+				$callback = self::$routes[$method][$dataMapped['path']];
+				$args = $dataMapped['args'] ?? [];
+				call_user_func($callback, ...$args);
+			} else {
+				echo 404; // TODO: render 404 page
+			}
+		} else {
+			if (is_string($callback)) {
+				// TODO: return view
+			}
+
+			if (is_array($callback)) {
+				// TODO: new Controller
+			}
+
+			call_user_func($callback);
+		}
+	}
+
+	public static function mapRouteData($paths, $url)
+	{
+		$args = false;
+		$router = null;
+		$arrUrlConverted = explode('/', $url);
+
+		foreach ($paths as $path => $route) {
+			$arrPathConverted = explode('/', $path);
+			$args = self::getParams($arrUrlConverted, $arrPathConverted);
+			if ($args) {
+				$router = $path;
+				break;
+			}
 		}
 
-		if (is_string($callback)) {
+		return $args && $router ? [
+			'path' => $router,
+			'args' => $args
+		] : null;
+	}
+
+	private static function getParams($arrUrlConverted, $arrPathConverted)
+	{
+		if (count($arrUrlConverted) !== count($arrPathConverted)) return null;
+		$params = [];
+		$countSizePath = count($arrPathConverted);
+
+		for ($i = 0; $i < $countSizePath; $i++) {
+			if ($arrPathConverted[$i] === $arrUrlConverted[$i]) {
+				continue;
+			}
+
+			if (self::hasColonVariableFormat($arrPathConverted[$i])) {
+				$params[] = $arrUrlConverted[$i];
+			} else {
+				$params = [];
+				break;
+			}
 		}
 
-		if (is_array($callback)) {
-		}
+		return count($params) ? $params : null;
+	}
 
-		call_user_func($callback);
+	private static function hasColonVariableFormat($str)
+	{
+		return preg_match('/^:[a-zA-Z_][a-zA-Z0-9_]*$/', $str);
 	}
 }
