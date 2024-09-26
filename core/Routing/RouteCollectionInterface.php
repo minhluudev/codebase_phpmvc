@@ -1,6 +1,6 @@
 <?php
 
-namespace app\core\Routing;
+namespace Core\Routing;
 
 interface RouteCollectionInterface
 {

@@ -1,12 +1,10 @@
 <?php
 
-use app\core\Routing\Route;
+use App\HTTP\Controllers\ProductsController;
+use Core\Routing\Route;
 
 
 Route::group('product', function () {
-	Route::get('list', function () {});
-
-	Route::get(':id', function ($id) {
-		echo "Product detail: " . $id;
-	});
+	Route::get('list', [ProductsController::class, 'index']);
+	Route::get(':id/detail', [ProductsController::class, 'show']);
 });

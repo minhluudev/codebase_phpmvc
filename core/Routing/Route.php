@@ -1,8 +1,8 @@
 <?php
 
-namespace app\core\Routing;
+namespace Core\Routing;
 
-use app\core\Request;
+use Core\Request;
 
 class Route implements RouteCollectionInterface
 {
@@ -43,10 +43,20 @@ class Route implements RouteCollectionInterface
 		$method = self::$request->method();
 		$path = self::$request->getPath();
 		$callback = self::$routes[$method][$path];
+
 		if (!$callback) {
 			$dataMapped = self::mapRouteData(self::$routes[$method], 	$path);
 			if ($dataMapped) {
 				$callback = self::$routes[$method][$dataMapped['path']];
+
+				if (is_array($callback)) {
+					$callback[0] = new $callback[0]();
+				}
+
+				if (is_string($callback)) {
+					// TODO: return view
+				}
+
 				$args = $dataMapped['args'] ?? [];
 				call_user_func($callback, ...$args);
 			} else {
@@ -58,7 +68,7 @@ class Route implements RouteCollectionInterface
 			}
 
 			if (is_array($callback)) {
-				// TODO: new Controller
+				$callback[0] = new $callback[0]();
 			}
 
 			call_user_func($callback);

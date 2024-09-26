@@ -3,7 +3,8 @@
   "description": "Build a PHP MVC Framework From Scratch",
   "autoload": {
     "psr-4": {
-      "app\\": "./"
+      "App\\": "./app",
+      "Core\\": "./core"
     }
   },
   "authors": [

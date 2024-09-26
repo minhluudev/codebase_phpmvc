@@ -1,8 +1,8 @@
 <?php
 
-namespace app\core;
+namespace Core;
 
-use app\core\Routing\Route;
+use Core\Routing\Route;
 
 class Application
 {
