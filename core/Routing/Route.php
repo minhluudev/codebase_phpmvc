@@ -13,9 +13,9 @@ class Route implements RouteCollectionInterface
 	public static array $routes = [];
 	private static Request $request;
 	private static string $groupName = '';
-	public function __construct()
+	public function __construct(Request $request)
 	{
-		self::$request = new Request();
+		self::$request = $request;
 	}
 
 	public static function get($path, $callback)
@@ -57,7 +57,7 @@ class Route implements RouteCollectionInterface
 				}
 
 				$args = $dataMapped['args'] ?? [];
-				call_user_func($callback, ...$args);
+				echo call_user_func($callback, ...$args);
 			} else {
 				echo 404; // TODO: render 404 page
 			}
@@ -70,7 +70,7 @@ class Route implements RouteCollectionInterface
 				$callback[0] = new $callback[0]();
 			}
 
-			call_user_func($callback);
+			echo call_user_func($callback);
 		}
 	}
 

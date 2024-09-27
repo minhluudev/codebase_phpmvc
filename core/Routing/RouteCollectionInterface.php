@@ -27,4 +27,10 @@ interface RouteCollectionInterface
 	 * @return void
 	 */
 	public static function group($path, $callback);
+
+	/**
+	 * Handle url request to controllers or views
+	 * @return void
+	 */
+	public static function resolve();
 }

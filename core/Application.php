@@ -8,10 +8,12 @@ class Application
 {
 	public static string $ROOT_PATH;
 	public Route $route;
+	public Request $request;
 	public function __construct($rootPath)
 	{
 		self::$ROOT_PATH = $rootPath;
-		$this->route = new Route();
+		$this->request = new Request();
+		$this->route = new Route($this->request);
 	}
 
 	public function run()

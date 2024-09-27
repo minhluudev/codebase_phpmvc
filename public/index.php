@@ -8,6 +8,4 @@ use Core\Application;
  * @var mixed
  */
 $app = new Application(dirname(__DIR__));
-echo '<pre>';
 $app->run();
-echo '</pre>';
