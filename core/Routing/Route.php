@@ -2,6 +2,7 @@
 
 namespace Core\Routing;
 
+use Core\Application;
 use Core\Request;
 
 class Route implements RouteCollectionInterface
@@ -49,25 +50,29 @@ class Route implements RouteCollectionInterface
 				$callback = self::$routes[$method][$dataMapped['path']];
 
 				if (is_array($callback)) {
-					$callback[0] = new $callback[0]();
+					Application::$app->controller = new $callback[0]();
+					$callback[0] = Application::$app->controller;
 				}
 
 				if (is_string($callback)) {
-					// TODO: return view
+					echo Application::$app->response->viewNotFound();
+					exit;
 				}
 
 				$args = $dataMapped['args'] ?? [];
 				echo call_user_func($callback, ...$args);
 			} else {
-				echo 404; // TODO: render 404 page
+				echo Application::$app->response->viewNotFound();
 			}
 		} else {
 			if (is_string($callback)) {
-				// TODO: return view
+				echo Application::$app->response->viewNotFound();
+				exit;
 			}
 
 			if (is_array($callback)) {
-				$callback[0] = new $callback[0]();
+				Application::$app->controller = new $callback[0]();
+				$callback[0] = Application::$app->controller;
 			}
 
 			echo call_user_func($callback);

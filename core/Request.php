@@ -2,7 +2,9 @@
 
 namespace Core;
 
-class Request
+use Core\Request\GetRequest;
+
+class Request extends GetRequest
 {
 	public function method()
 	{

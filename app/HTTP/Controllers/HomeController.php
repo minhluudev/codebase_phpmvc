@@ -2,14 +2,15 @@
 
 namespace App\HTTP\Controllers;
 
+use Core\Controller;
+
 
 class HomeController extends Controller
 {
 	public function index()
 	{
-		return $this->view('home', [
-			'title' => 'Home',
-			'content' => 'Home page 1'
+		return $this->renderView('home', [
+			'title' => 'Home'
 		]);
 	}
 }

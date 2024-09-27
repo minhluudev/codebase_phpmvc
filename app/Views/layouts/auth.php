@@ -8,16 +8,7 @@
 </head>
 
 <body>
-	<header>
-		<a href="/">Home</a> |
-		<a href="/login">Login</a> |
-		<a href="/register">Register</a>
-	</header>
-	<hr />
-	<main>
-		{{content}}
-	</main>
-	<footer>Footer</footer>
+	{{content}}
 </body>
 
 </html>

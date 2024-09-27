@@ -2,7 +2,9 @@
 
 namespace Core;
 
-class View
+use Core\Application;
+
+class ViewResponse
 {
 	private string $layout = 'main';
 
@@ -21,6 +23,12 @@ class View
 		$viewContent = $this->renderViewOnly($path, $params);
 
 		return str_replace('{{content}}', $viewContent, $layoutContent);
+	}
+
+	public function viewNotFound()
+	{
+		$this->setLayout('error');
+		return $this->view('_404');
 	}
 
 	private function hasLayout()
