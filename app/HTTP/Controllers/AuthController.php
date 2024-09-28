@@ -11,6 +11,7 @@ class AuthController extends Controller
 	{
 		$this->setViewLayout('auth');
 	}
+
 	public function login()
 	{
 		return $this->renderView('login', [
@@ -20,9 +21,22 @@ class AuthController extends Controller
 
 	public function register(RegisterRequest $request)
 	{
-		var_dump($request->all(['email']));
+		if ($request->isPost()) {
+			$isValid = $request->validate();
+
+			if ($isValid) {
+				return $this->renderView('login', [
+					'title' => 'Login'
+				]);
+			}
+		}
+
 		return $this->renderView('register', [
-			'title' => 'Register'
+			'title' => 'Register',
+			'model' => [
+				'errors' => $request->getErrors(),
+				'user' => $request->all()
+			]
 		]);
 	}
 }

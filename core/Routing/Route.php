@@ -23,13 +23,13 @@ class Route implements RouteCollectionInterface
 	public static function get($path, $callback)
 	{
 		$pathConvert = trim(self::$groupName  . $path, '/');
-		self::$routes['get'][$pathConvert] = $callback;
+		self::$routes[self::$request::GET_METHOD][$pathConvert] = $callback;
 	}
 
 	public static function post($path, $callback)
 	{
 		$pathConvert = trim(self::$groupName  . $path, '/');
-		self::$routes['post'][$pathConvert] = $callback;
+		self::$routes[self::$request::POST_METHOD][$pathConvert] = $callback;
 	}
 
 	public static function group($path, $callback)

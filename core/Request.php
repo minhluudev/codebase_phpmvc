@@ -4,6 +4,9 @@ namespace Core;
 
 class Request
 {
+	public const GET_METHOD = 'get';
+	public const POST_METHOD = 'post';
+
 	public function method(): string
 	{
 		return strtolower($_SERVER['REQUEST_METHOD']);
@@ -32,5 +35,15 @@ class Request
 		}
 
 		return $result;
+	}
+
+	public function isGet(): bool
+	{
+		return $this->method() === self::GET_METHOD;
+	}
+
+	public function isPost(): bool
+	{
+		return $this->method() === self::POST_METHOD;
 	}
 }

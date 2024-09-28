@@ -12,6 +12,8 @@ class Application
 	public Response $response;
 	public Request $request;
 	public Controller $controller;
+	public ServiceContainer $container;
+
 	public function __construct($rootPath)
 	{
 		self::$app = $this;
@@ -19,6 +21,7 @@ class Application
 		$this->response = new Response();
 		$this->request = new Request();
 		$this->route = new Route($this->request);
+		$this->container = new ServiceContainer();
 	}
 
 	public function run()
