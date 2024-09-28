@@ -2,6 +2,7 @@
 
 namespace App\HTTP\Controllers;
 
+use App\HTTP\Requests\RegisterRequest;
 use Core\Controller;
 
 class AuthController extends Controller
@@ -17,8 +18,9 @@ class AuthController extends Controller
 		]);
 	}
 
-	public function register()
+	public function register(RegisterRequest $request)
 	{
+		var_dump($request->all(['email']));
 		return $this->renderView('register', [
 			'title' => 'Register'
 		]);

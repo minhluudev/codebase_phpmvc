@@ -3,6 +3,7 @@
 namespace Core\Routing;
 
 use Core\Application;
+use Core\Helper;
 use Core\Request;
 
 class Route implements RouteCollectionInterface
@@ -44,42 +45,69 @@ class Route implements RouteCollectionInterface
 		$method = self::$request->method();
 		$path = self::$request->getPath();
 		$callback = self::$routes[$method][$path];
+
 		if (!$callback) {
-			$dataMapped = self::mapRouteData(self::$routes[$method], 	$path);
-			if ($dataMapped) {
-				$callback = self::$routes[$method][$dataMapped['path']];
-
-				if (is_array($callback)) {
-					Application::$app->controller = new $callback[0]();
-					$callback[0] = Application::$app->controller;
-				}
-
-				if (is_string($callback)) {
-					echo Application::$app->response->viewNotFound();
-					exit;
-				}
-
-				$args = $dataMapped['args'] ?? [];
-				echo call_user_func($callback, ...$args);
-			} else {
-				echo Application::$app->response->viewNotFound();
-			}
+			self::handleResolvePathWithParams($method, $path);
 		} else {
-			if (is_string($callback)) {
-				echo Application::$app->response->viewNotFound();
-				exit;
-			}
-
-			if (is_array($callback)) {
-				Application::$app->controller = new $callback[0]();
-				$callback[0] = Application::$app->controller;
-			}
-
-			echo call_user_func($callback);
+			self::handleResolveWithNormalPath($callback);
 		}
 	}
 
-	public static function mapRouteData($paths, $url)
+	private static function handleResolvePathWithParams($method, $path)
+	{
+		$dataMapped = self::mapRouteData(self::$routes[$method], 	$path);
+
+		if ($dataMapped) {
+			$callback = self::$routes[$method][$dataMapped['path']];
+			$args = $dataMapped['args'] ?? [];
+
+			self::handleResolveWithNormalPath($callback, $args);
+		} else {
+			echo Application::$app->response->viewNotFound();
+		}
+	}
+
+	private static function handleResolveWithNormalPath($callback, $args = [])
+	{
+		if (is_string($callback)) {
+			echo Application::$app->response->viewNotFound();
+			exit;
+		}
+
+		if (is_array($callback)) {
+			$request = self::getRequestWithMethodCallback($callback);
+			Application::$app->controller = new $callback[0]();
+			$callback[0] = Application::$app->controller;
+		} else {
+			$request = self::getRequestWithFunctionCallback($callback);
+		}
+
+		echo call_user_func($callback, $request, ...$args);
+	}
+
+	private static function getRequestWithMethodCallback($callback)
+	{
+		$params = Helper::getParametersTypeMethodOrFunction($callback[1], $callback[0]);
+		$paramFirstType = $params[0];
+		if (class_exists($paramFirstType)) {
+			return new $paramFirstType();
+		}
+
+		return self::$request;
+	}
+
+	private static function getRequestWithFunctionCallback($callback)
+	{
+		$params = Helper::getParametersTypeMethodOrFunction($callback);
+		$paramFirstType = $params[0];
+		if (class_exists($paramFirstType)) {
+			return new $paramFirstType();
+		}
+
+		return self::$request;
+	}
+
+	private static function mapRouteData($paths, $url): array|null
 	{
 		$args = false;
 		$router = null;
