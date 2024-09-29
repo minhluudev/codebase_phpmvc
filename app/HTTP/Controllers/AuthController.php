@@ -3,7 +3,9 @@
 namespace App\HTTP\Controllers;
 
 use App\HTTP\Requests\RegisterRequest;
+use App\Models\User;
 use Core\Controller;
+use Core\Database;
 
 class AuthController extends Controller
 {
@@ -25,9 +27,10 @@ class AuthController extends Controller
 			$isValid = $request->validate();
 
 			if ($isValid) {
-				return $this->renderView('login', [
-					'title' => 'Login'
-				]);
+				$userModel = new User();
+				$user = $userModel->insert($request->all(['full_name', 'email', 'password']));
+				var_dump($user);
+				return true;
 			}
 		}
 
