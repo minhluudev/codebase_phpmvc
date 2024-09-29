@@ -2,11 +2,13 @@
 
 namespace Core;
 
+use Core\Database\MigrationTrait;
 use PDO;
 use PDOException;
 
 class Database
 {
+	use MigrationTrait;
 	protected PDO $pdo;
 
 	public function __construct()
@@ -30,7 +32,12 @@ class Database
 			// set the PDO error mode to exception
 			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		} catch (PDOException $e) {
-			// TODO: handle exception
+			Log::error($e->getMessage());
 		}
+	}
+
+	public function applyMigrations()
+	{
+		$this->handleApplyMigrations($this->pdo);
 	}
 }
