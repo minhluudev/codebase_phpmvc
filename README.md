@@ -10,6 +10,12 @@ cd public && php -S localhost:8080
 ```
 
 ## III. Run migration
+### Migrate
 ```
-cd database && php migration.php
+make migrate
+```
+
+### Migrate rollback
+```
+make migrate-rollback
 ```

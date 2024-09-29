@@ -2,7 +2,6 @@
 
 namespace Core\Database;
 
-use Core\Log;
 use Core\Schema;
 use DirectoryIterator;
 use PDO;
@@ -34,6 +33,24 @@ trait MigrationTrait
 		echo 'DONE!' . PHP_EOL;
 	}
 
+	public function handleRollbackMigrations(PDO $pdo)
+	{
+		echo "Migration rollback start:" . PHP_EOL;
+		$migrationDirectory = __DIR__ . '/../../database/migrations';
+		$oldMigrations = $this->getMigrations($pdo);
+		if (!count($oldMigrations)) {
+			echo 'DONE!' . PHP_EOL;
+			return;
+		}
+
+		$migrate = $oldMigrations[0];
+		$migrateClass = include $migrationDirectory . '/' . $migrate;
+		$migrateClass->down();
+		$this->removeLastMigration($pdo);
+		echo $migrate . PHP_EOL;
+		echo 'DONE!' . PHP_EOL;
+	}
+
 	private function createMigrationTable(PDO $pdo)
 	{
 		$pdo->exec("CREATE TABLE IF NOT EXISTS migrations (
@@ -46,14 +63,15 @@ trait MigrationTrait
 	private function getMigrations(PDO $pdo)
 	{
 		try {
-			$sql = "SELECT migration FROM migrations";
+			$sql = "SELECT migration FROM migrations ORDER BY id DESC";
 			$stmt = $pdo->prepare($sql);
 			$stmt->execute();
 			$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			$results = array_map(fn($item)  => $item['migration'], $results);
+			
 			return $results;
 		} catch (PDOException $e) {
-			Log::error($e->getMessage());
+			echo $e->getMessage() . PHP_EOL;
 		}
 	}
 
@@ -61,13 +79,31 @@ trait MigrationTrait
 	{
 		try {
 			if (!count($values)) return;
-
-			$sql = "INSERT INTO migrations (migration) VALUES ('" . implode("'),('", $values) . "');";
-			$sql .= implode(' ', Schema::$sql);
-			$stmt = $pdo->prepare($sql);
-			$stmt->execute();
+			$pdo->beginTransaction();
+			$pdo->exec("INSERT INTO migrations (migration) VALUES ('" . implode("'),('", $values) . "');");
+			$pdo->exec(implode(' ', Schema::$sql));
+			$pdo->commit();
 		} catch (PDOException $e) {
-			Log::error($e->getMessage());
+			if ($pdo->inTransaction()) {
+				$pdo->rollBack();
+			}
+			echo $e->getMessage() . PHP_EOL;
+		}
+	}
+
+	private function removeLastMigration(PDO $pdo)
+	{
+		try {
+			$pdo->beginTransaction();
+			$sql = "DELETE FROM `migrations` WHERE id = (SELECT id FROM (SELECT MAX(id) AS id FROM `migrations`) AS `temp_table`);";
+			$sql .= implode(' ', Schema::$sql);
+			$pdo->exec($sql);
+			$pdo->commit();
+		} catch (PDOException $e) {
+			if ($pdo->inTransaction()) {
+				$pdo->rollBack();
+			}
+			echo $e->getMessage() . PHP_EOL;
 		}
 	}
 }

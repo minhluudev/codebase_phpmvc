@@ -20,11 +20,23 @@ class Blueprint
 	{
 		$this->columns[] = "`$name` INT NOT NULL AUTO_INCREMENT PRIMARY KEY";
 	}
+
 	public function string($name, $size = 255)
 	{
 		$this->columns[] = "`$name` VARCHAR($size)";
 
 		return $this;
+	}
+
+	public function timestamps()
+	{
+		$this->columns[] = "`created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP";
+		$this->columns[] = "`updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP";
+
+	}
+
+	public function softDeletes() {
+		$this->columns[] = "`deleted_at` TIMESTAMP NULL";
 	}
 
 	public function nullable($status = true)

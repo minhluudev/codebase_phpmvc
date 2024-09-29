@@ -18,7 +18,7 @@ class Schema
 	{
 		$table = new Blueprint();
 		call_user_func($callback, $table);
-		self::$sql[] = "CREATE TABLE $tableName (" . implode(',', $table->getColumns()) . ");";
+		self::$sql[] = "CREATE TABLE `$tableName` (" . implode(',', $table->getColumns()) . ");";
 	}
 
 	/**
@@ -39,5 +39,7 @@ class Schema
 	 * @param mixed $table
 	 * @return void
 	 */
-	public static function dropIfExists($table) {}
+	public static function dropIfExists($table) {
+		self::$sql[] = "DROP TABLE IF EXISTS `$table`;";
+	}
 }

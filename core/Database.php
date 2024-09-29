@@ -40,4 +40,9 @@ class Database
 	{
 		$this->handleApplyMigrations($this->pdo);
 	}
+
+	public function rollbackMigrations()
+	{
+		$this->handleRollbackMigrations($this->pdo);
+	}
 }
