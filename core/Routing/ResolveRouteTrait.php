@@ -3,7 +3,8 @@
 namespace Core\Routing;
 
 use Core\Application;
-use Core\Helper;
+use ReflectionFunction;
+use ReflectionMethod;
 
 trait ResolveRouteTrait
 {
@@ -59,7 +60,7 @@ trait ResolveRouteTrait
 
 	private static function getRequestWithMethodCallback($callback)
 	{
-		$params = Helper::getParametersTypeMethodOrFunction($callback[1], $callback[0]);
+		$params = self::getParametersTypeMethodOrFunction($callback[1], $callback[0]);
 		$paramFirstType = $params[0];
 		if (class_exists($paramFirstType)) {
 			return new $paramFirstType();
@@ -70,7 +71,7 @@ trait ResolveRouteTrait
 
 	private static function getRequestWithFunctionCallback($callback)
 	{
-		$params = Helper::getParametersTypeMethodOrFunction($callback);
+		$params = self::getParametersTypeMethodOrFunction($callback);
 		$paramFirstType = $params[0];
 		if (class_exists($paramFirstType)) {
 			return new $paramFirstType();
@@ -125,5 +126,27 @@ trait ResolveRouteTrait
 	private static function hasColonVariableFormat($str)
 	{
 		return preg_match('/^:[a-zA-Z_][a-zA-Z0-9_]*$/', $str);
+	}
+
+	private static function getParametersTypeMethodOrFunction($method, $className = null): array
+	{
+		$paramTypes = [];
+
+		if ($className) {
+			$reflection = new ReflectionMethod($className, $method);
+		} else {
+			$reflection = new ReflectionFunction($method);
+		}
+
+		$params = $reflection->getParameters();
+		foreach ($params as $param) {
+			$type = $param->getType();
+
+			if ($type !== null) {
+				$paramTypes[] = $type->getName();
+			}
+		}
+
+		return $paramTypes;
 	}
 }
