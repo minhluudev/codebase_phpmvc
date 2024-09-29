@@ -4,12 +4,12 @@
 
 - PHP 8.3.6
 
-## Run project
+## II. Run project
 ```
 cd public && php -S localhost:8080
 ```
 
-## Run migration
+## III. Run migration
 ```
 cd database && php migration.php
 ```
