@@ -1,3 +1,4 @@
 vendor
 logs
 .env
+docker/db/data
