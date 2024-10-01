@@ -28,13 +28,11 @@ trait ResolveRouteTrait
 		$method = $request->method();
 		$path = $request->getPath();
 
-		$dataMapped = self::mapRouteData($routes[$method], 	$path);
-
-		if ($dataMapped) {
-			$callback = $routes[$method][$dataMapped['path']];
-			$args = $dataMapped['args'] ?? [];
-
-			self::handleResolveWithNormalPath($callback, $args,);
+		$dataMatched = self::matchRouteData($routes[$method], $path);
+		if ($dataMatched) {
+			$callback = $routes[$method][$dataMatched['path']];
+			$args = $dataMatched['args'] ?? [];
+			self::handleResolveWithNormalPath($callback, $args);
 		} else {
 			echo Application::$app->response->viewNotFound();
 		}
@@ -80,15 +78,13 @@ trait ResolveRouteTrait
 		return Application::$app->request;
 	}
 
-	private static function mapRouteData($paths, $url): array|null
+	private static function matchRouteData($paths, $url): array|null
 	{
 		$args = false;
 		$router = null;
-		$arrUrlConverted = explode('/', $url);
 
 		foreach ($paths as $path => $route) {
-			$arrPathConverted = explode('/', $path);
-			$args = self::getParams($arrUrlConverted, $arrPathConverted);
+			$args = self::argsMatched($url, $path);
 			if ($args) {
 				$router = $path;
 				break;
@@ -101,31 +97,25 @@ trait ResolveRouteTrait
 		] : null;
 	}
 
-	private static function getParams($arrUrlConverted, $arrPathConverted)
+	private static function argsMatched($url, $patch)
 	{
-		if (count($arrUrlConverted) !== count($arrPathConverted)) return null;
-		$params = [];
-		$countSizePath = count($arrPathConverted);
+		$args = null;
+		$pattern = self::convertToPattern($patch);
 
-		for ($i = 0; $i < $countSizePath; $i++) {
-			if ($arrPathConverted[$i] === $arrUrlConverted[$i]) {
-				continue;
-			}
-
-			if (self::hasColonVariableFormat($arrPathConverted[$i])) {
-				$params[] = $arrUrlConverted[$i];
-			} else {
-				$params = [];
-				break;
-			}
+		if (preg_match($pattern, $url, $matches)) {
+			$args = $matches;
+			array_shift($args);
 		}
 
-		return count($params) ? $params : null;
+		return $args;
 	}
 
-	private static function hasColonVariableFormat($str)
+	private static function convertToPattern($route)
 	{
-		return preg_match('/^:[a-zA-Z_][a-zA-Z0-9_]*$/', $str);
+		$pattern = preg_replace('/(:\w+)/', '(\d+)', $route);
+		$pattern = '/^' . str_replace('/', '\/', $pattern) . '\/?(\/)?$/';
+
+		return $pattern;
 	}
 
 	private static function getParametersTypeMethodOrFunction($method, $className = null): array
