@@ -59,8 +59,8 @@ trait ResolveRouteTrait
 	private static function getRequestWithMethodCallback($callback)
 	{
 		$params = self::getParametersTypeMethodOrFunction($callback[1], $callback[0]);
-		$paramFirstType = $params[0];
-		if (class_exists($paramFirstType)) {
+		$paramFirstType = isset($params[0]) ? $params[0] : null;
+		if ($paramFirstType && class_exists($paramFirstType)) {
 			return new $paramFirstType();
 		}
 
@@ -70,8 +70,8 @@ trait ResolveRouteTrait
 	private static function getRequestWithFunctionCallback($callback)
 	{
 		$params = self::getParametersTypeMethodOrFunction($callback);
-		$paramFirstType = $params[0];
-		if (class_exists($paramFirstType)) {
+		$paramFirstType = isset($params[0]) ? $params[0] : null;
+		if ($paramFirstType && class_exists($paramFirstType)) {
 			return new $paramFirstType();
 		}
 
