@@ -7,7 +7,7 @@ class Log
 	private static function fileWrite($content)
 	{
 		$fileName = date('Y-m-d') . '.log';
-		$filePath = __DIR__ . "/../logs/$fileName";
+		$filePath = dirname(__DIR__) . "/logs/$fileName";
 
 		if (!file_exists($filePath)) {
 			$file = fopen($filePath, 'w');

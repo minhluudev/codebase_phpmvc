@@ -51,4 +51,13 @@ class Blueprint
 
 		$this->columns[] = $lastItem;
 	}
+
+	public function unique()
+	{
+		$lastItem = array_pop($this->columns);
+		$lastItem .= " UNIQUE";
+		$this->columns[] = $lastItem;
+		
+		return $this;
+	}
 }

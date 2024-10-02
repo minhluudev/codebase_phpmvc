@@ -28,8 +28,10 @@ class AuthController extends Controller
 
 			if ($isValid) {
 				$userModel = new User();
-				$user = $userModel->insert($request->all(['full_name', 'email', 'password']));
-				var_dump($user);
+				$user = $request->all(['full_name', 'email', 'password']);
+				$user['password'] = password_hash($user['password'], PASSWORD_DEFAULT);
+				$userModel->insert($user);
+
 				return true;
 			}
 		}

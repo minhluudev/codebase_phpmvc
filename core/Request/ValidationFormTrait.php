@@ -44,7 +44,7 @@ trait ValidationFormTrait
 	 */
 	private function validateRequired($rule, $value)
 	{
-		$message = $rule['message'] ? $rule['message'] : 'This field is required';
+		$message = isset($rule['message']) ? $rule['message'] : 'This field is required';
 		return $value ? null : $message;
 	}
 
@@ -101,7 +101,7 @@ trait ValidationFormTrait
 	 */
 	private function validateEmail($rule, $value)
 	{
-		$message = $rule['message'] ? $rule['message'] : "This email is invalid";
+		$message = isset($rule['message']) ? $rule['message'] : "This email is invalid";
 
 		return filter_var($value, FILTER_VALIDATE_EMAIL) ? null : $message;
 	}
@@ -118,7 +118,7 @@ trait ValidationFormTrait
 	private function validatePassword($rule, $value)
 	{
 		$pattern = "/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,255}$/";
-		$message = $rule['message'] ? $rule['message'] : "This password is invalid";
+		$message = isset($rule['message']) ? $rule['message'] : "This password is invalid";
 
 		return preg_match($pattern, $value) ? null : $message;
 	}
@@ -135,7 +135,7 @@ trait ValidationFormTrait
 	 */
 	private function validateEqual($rule, $value, $values)
 	{
-		$message = $rule['message'] ? $rule['message'] : "This confirm password is not match";
+		$message = isset($rule['message']) ? $rule['message'] : "This confirm password is not match";
 
 		return $value === $values[$rule['field']] ? null : $message;
 	}
