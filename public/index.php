@@ -7,9 +7,9 @@ use Dotenv\Dotenv;
 $dotenv = Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->safeLoad();
 
-/**
- * Create a application
- * @var mixed
- */
 $app = new Application(dirname(__DIR__));
-$app->run();
+try {
+    $app->run();
+} catch (ReflectionException $e) {
+    echo $e->getMessage();
+}

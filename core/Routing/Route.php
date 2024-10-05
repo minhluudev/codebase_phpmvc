@@ -2,6 +2,8 @@
 
 namespace Core\Routing;
 
+use Core\Application;
+use Core\Contracts\Routing\RouteCollectionInterface;
 use Core\Request;
 
 /**
@@ -29,10 +31,15 @@ class Route extends ResolveRoute implements RouteCollectionInterface
         if (isset(self::$middlewares[self::$prefix])) {
             $middlewares = array_merge(self::$middlewares[self::$prefix], $middlewares);
         }
-        // Trim the path.
-        $path = trim($path, '/');
-        // Set the path.
-        $path = self::$prefix . "/$path";
+
+        if (!$path || $path === '/') {
+            $path = self::$prefix;
+        } else {
+            $path = trim($path, '/');
+            $path = self::$prefix . "/$path";
+        }
+
+        $path = preg_replace('/\/+/', '/', $path);
         // Save the route.
         self::$routes[Request::GET_METHOD][$path] = ['action' => $action, 'middlewares' => $middlewares];
     }
@@ -55,10 +62,15 @@ class Route extends ResolveRoute implements RouteCollectionInterface
         if (isset(self::$middlewares[self::$prefix])) {
             $middlewares = array_merge(self::$middlewares[self::$prefix], $middlewares);
         }
-        // Trim the path.
-        $path = trim($path, '/');
-        // Set the path.
-        $path = self::$prefix . "/$path";
+
+        if (!$path || $path === '/') {
+            $path = self::$prefix;
+        } else {
+            $path = trim($path, '/');
+            $path = self::$prefix . "/$path";
+        }
+
+        $path = preg_replace('/\/+/', '/', $path);
         // Save the route.
         self::$routes[Request::POST_METHOD][$path] = ['action' => $action, 'middlewares' => $middlewares];
     }
@@ -77,14 +89,14 @@ class Route extends ResolveRoute implements RouteCollectionInterface
      */
     public static function group(string $prefix, mixed $callback, array $middlewares = []): void
     {
-        // Initialize the middlewares.
-        $middlewares = [];
+        $basePath = Application::$ROOT_PATH;
         // Save the previous prefix.
         $previousPrefix = self::$prefix;
         // Merge the middlewares of the previous prefix with the current middlewares.
-        if (self::$middlewares[$previousPrefix]) {
+        if (isset(self::$middlewares[$previousPrefix])) {
             $middlewares = array_merge(self::$middlewares[$previousPrefix], $middlewares);
         }
+
         // Trim the prefix.
         $prefix = trim($prefix, '/');
         // Set the new prefix.
@@ -92,7 +104,7 @@ class Route extends ResolveRoute implements RouteCollectionInterface
         // Save the middlewares for the current prefix.
         self::$middlewares[self::$prefix] = $middlewares;
         // Call the callback to define the routes in the group.
-        call_user_func($callback);
+        call_user_func($callback, $basePath);
         // Reset the prefix to the previous prefix.
         self::$prefix = $previousPrefix;
     }

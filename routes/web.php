@@ -18,4 +18,3 @@ Route::get('register/:id', function (Request $request, $id) {
     echo $id;
     echo '</pre>';
 });
-

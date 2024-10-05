@@ -31,7 +31,6 @@ class Application
     public function run(): void
     {
         $this->registerServiceProviders();
-        include_once self::$ROOT_PATH . "/routes/web.php";
         $this->route::resolve();
     }
 
