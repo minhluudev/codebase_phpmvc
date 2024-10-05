@@ -20,7 +20,7 @@ class Application
 		self::$ROOT_PATH = $rootPath;
 		$this->response = new Response();
 		$this->request = new Request();
-		$this->route = new Route($this->request);
+		$this->route = new Route();
 		$this->container = new ServiceContainer();
 	}
 

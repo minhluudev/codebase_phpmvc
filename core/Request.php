@@ -12,11 +12,12 @@ class Request
 		return strtolower($_SERVER['REQUEST_METHOD']);
 	}
 
-	public function getPath()
-	{
-		if ($_SERVER['REQUEST_URI']  === '/')  return '';
-
-		return trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+	public function getPath(): string
+    {
+		if ($_SERVER['REQUEST_URI']  === '/')  return '/';
+        $uri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+        
+		return "/$uri";
 	}
 
 	public function all($args = []): array
