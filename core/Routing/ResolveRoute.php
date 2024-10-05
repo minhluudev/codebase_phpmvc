@@ -3,6 +3,7 @@
 namespace Core\Routing;
 
 use Core\Application;
+use Exception;
 use ReflectionException;
 use ReflectionFunction;
 use ReflectionMethod;
@@ -186,6 +187,8 @@ class ResolveRoute
             $request = self::getRequestWithFunctionCallback($callback);
         }
 
+        self::handleMiddleware($route['middlewares']);
+
         echo call_user_func($callback, $request, ...$args);
     }
 
@@ -240,5 +243,28 @@ class ResolveRoute
         }
 
         return Application::$app->request;
+    }
+
+    /**
+     * Handle the middleware.
+     *
+     * This method handles the middleware.
+     *
+     * @param array $middlewares The middlewares to handle.
+     *
+     * @return void
+     */
+    private static function handleMiddleware(array $middlewares): void
+    {
+        $serviceContainer = Application::$app->container;
+
+        foreach ($middlewares as $middleware) {
+            try {
+                $serviceContainer->get("middleware:$middleware");
+            } catch (Exception $e) {
+                echo $e->getMessage();
+                exit;
+            }
+        }
     }
 }

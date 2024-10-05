@@ -6,14 +6,17 @@ use Exception;
 
 class ServiceContainer
 {
-	private $services = [];
+	private array $services = [];
 
-	public function set($name, $closure)
+	public function set($name, $closure) : void
 	{
 		$this->services[$name] = $closure;
 	}
 
-	public function get($name)
+    /**
+     * @throws Exception
+     */
+    public function get($name) : mixed
 	{
 		if (!isset($this->services[$name])) {
 			throw new Exception("Service not found.");
