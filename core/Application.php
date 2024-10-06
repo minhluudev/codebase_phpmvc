@@ -15,6 +15,7 @@ class Application
     public Controller $controller;
     public ServiceContainer $container;
     public Session $session;
+    public Database $db;
 
     public function __construct($rootPath)
     {
@@ -25,6 +26,8 @@ class Application
         $this->route = new Route();
         $this->container = new ServiceContainer();
         $this->session = new Session();
+        $this->db = new Database();
+        $this->db->connectToDatabase();
     }
 
     /**

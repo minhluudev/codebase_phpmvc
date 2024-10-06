@@ -9,8 +9,8 @@ use PDOException;
 
 trait MigrationTrait
 {
-	public function handleApplyMigrations(PDO $pdo)
-	{
+	public function handleApplyMigrations(PDO $pdo): void
+    {
 		echo "Migration start:" . PHP_EOL;
 		$this->createMigrationTable($pdo);
 		$migrationDirectory = __DIR__ . '/../../database/migrations';
@@ -33,8 +33,8 @@ trait MigrationTrait
 		echo 'DONE!' . PHP_EOL;
 	}
 
-	public function handleRollbackMigrations(PDO $pdo)
-	{
+	public function handleRollbackMigrations(PDO $pdo): void
+    {
 		echo "Migration rollback start:" . PHP_EOL;
 		$migrationDirectory = __DIR__ . '/../../database/migrations';
 		$oldMigrations = $this->getMigrations($pdo);
@@ -51,8 +51,8 @@ trait MigrationTrait
 		echo 'DONE!' . PHP_EOL;
 	}
 
-	private function createMigrationTable(PDO $pdo)
-	{
+	private function createMigrationTable(PDO $pdo): void
+    {
 		$pdo->exec("CREATE TABLE IF NOT EXISTS migrations (
 			id INT AUTO_INCREMENT PRIMARY KEY,
 			migration VARCHAR(255),
@@ -67,16 +67,15 @@ trait MigrationTrait
 			$stmt = $pdo->prepare($sql);
 			$stmt->execute();
 			$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-			$results = array_map(fn($item)  => $item['migration'], $results);
-			
-			return $results;
+
+            return array_map(fn($item)  => $item['migration'], $results);
 		} catch (PDOException $e) {
 			echo $e->getMessage() . PHP_EOL;
 		}
 	}
 
-	private function insertMigration(PDO $pdo, array $values)
-	{
+	private function insertMigration(PDO $pdo, array $values): void
+    {
 		try {
 			if (!count($values)) return;
 			$pdo->beginTransaction();
@@ -91,8 +90,8 @@ trait MigrationTrait
 		}
 	}
 
-	private function removeLastMigration(PDO $pdo)
-	{
+	private function removeLastMigration(PDO $pdo): void
+    {
 		try {
 			$pdo->beginTransaction();
 			$sql = "DELETE FROM `migrations` WHERE id = (SELECT id FROM (SELECT MAX(id) AS id FROM `migrations`) AS `temp_table`);";

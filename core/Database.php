@@ -13,11 +13,11 @@ class Database
 
 	public function __construct()
 	{
-		$this->connectToDatabase();
+//		$this->connectToDatabase();
 	}
 
-	private function connectToDatabase()
-	{
+	public function connectToDatabase(): void
+    {
 		$config = Helper::config('db');
 		$drive = $config['default'];
 		$connection = $config['connections'][$config['default']];
@@ -36,13 +36,15 @@ class Database
 		}
 	}
 
-	public function applyMigrations()
-	{
+	public function applyMigrations(): void
+    {
+        $this->connectToDatabase();
 		$this->handleApplyMigrations($this->pdo);
 	}
 
-	public function rollbackMigrations()
-	{
+	public function rollbackMigrations(): void
+    {
+        $this->connectToDatabase();
 		$this->handleRollbackMigrations($this->pdo);
 	}
 }
