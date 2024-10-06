@@ -268,7 +268,7 @@ class ResolveRoute
         }
     }
 
-    public static function convertPath(string $path, array $middlewares = []): string
+    public static function setRoute(string $method, string $path, mixed $action, array $middlewares = []): void
     {
         if (isset(self::$middlewares[self::$prefix])) {
             $middlewares = array_merge(self::$middlewares[self::$prefix], $middlewares);
@@ -281,6 +281,8 @@ class ResolveRoute
             $path = self::$prefix . "/$path";
         }
 
-        return preg_replace('/\/+/', '/', $path);
+        $path = preg_replace('/\/+/', '/', $path);
+
+        self::$routes[$method][$path] = ['action' => $action, 'middlewares' => $middlewares];
     }
 }

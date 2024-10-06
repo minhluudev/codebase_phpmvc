@@ -27,8 +27,7 @@ class Route extends ResolveRoute implements RouteCollectionInterface
      */
     public static function get(string $path, mixed $action, array $middlewares = []): void
     {
-        $path = self::convertPath($path, $middlewares);
-        self::$routes[Request::GET_METHOD][$path] = ['action' => $action, 'middlewares' => $middlewares];
+        self::setRoute(Request::GET_METHOD, $path, $action, $middlewares);
     }
 
     /**
@@ -45,8 +44,7 @@ class Route extends ResolveRoute implements RouteCollectionInterface
      */
     public static function post(string $path, mixed $action, array $middlewares = []): void
     {
-        $path = self::convertPath($path, $middlewares);
-        self::$routes[Request::POST_METHOD][$path] = ['action' => $action, 'middlewares' => $middlewares];
+        self::setRoute(Request::POST_METHOD, $path, $action, $middlewares);
     }
 
     /**
@@ -57,8 +55,7 @@ class Route extends ResolveRoute implements RouteCollectionInterface
      */
     public static function put(string $path, mixed $action, array $middlewares = []): void
     {
-        $path = self::convertPath($path, $middlewares);
-        self::$routes[Request::PUT_METHOD][$path] = ['action' => $action, 'middlewares' => $middlewares];
+        self::setRoute(Request::PUT_METHOD, $path, $action, $middlewares);
     }
 
     /**
@@ -69,8 +66,7 @@ class Route extends ResolveRoute implements RouteCollectionInterface
      */
     public static function path(string $path, mixed $action, array $middlewares = []): void
     {
-        $path = self::convertPath($path, $middlewares);
-        self::$routes[Request::PATCH_METHOD][$path] = ['action' => $action, 'middlewares' => $middlewares];
+        self::setRoute(Request::PATCH_METHOD, $path, $action, $middlewares);
     }
 
     /**
@@ -81,8 +77,7 @@ class Route extends ResolveRoute implements RouteCollectionInterface
      */
     public static function delete(string $path, mixed $action, array $middlewares = []): void
     {
-        $path = self::convertPath($path, $middlewares);
-        self::$routes[Request::DELETE_METHOD][$path] = ['action' => $action, 'middlewares' => $middlewares];
+        self::setRoute(Request::DELETE_METHOD, $path, $action, $middlewares);
     }
 
     /**

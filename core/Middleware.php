@@ -15,4 +15,8 @@ abstract class Middleware
      * @return void
      */
     abstract public function handle(): void;
+
+    protected function getSession($key){
+        return Application::$app->session->getFlash($key);
+    }
 }
