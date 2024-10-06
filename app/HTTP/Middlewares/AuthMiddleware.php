@@ -11,6 +11,10 @@ class AuthMiddleware extends Middleware
      */
     public function handle(): void
     {
-//        echo "AuthMiddleware";
+        $user = $this->getSession('user');
+        if (!$user['value']) {
+            header('Location: /login');
+            exit;
+        }
     }
 }

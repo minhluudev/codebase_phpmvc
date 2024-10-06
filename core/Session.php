@@ -25,7 +25,7 @@ class Session
 
     public function __destruct()
     {
-        $this->removeFlashMessages();
+//        $this->removeFlashMessages();
     }
 
     private function removeFlashMessages(): void

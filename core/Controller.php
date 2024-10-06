@@ -19,4 +19,9 @@ class Controller
     {
         return Response::json($data, $code);
     }
+
+    public function setSession($key, $value): void
+    {
+        Application::$app->session->setFlash($key, $value);
+    }
 }

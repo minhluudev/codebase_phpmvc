@@ -10,7 +10,6 @@
 <body>
 	<header>
 		<a href="/">Home</a> |
-		<a href="/articles">Article</a> |
 		<a href="/login">Login</a> |
 		<a href="/register">Register</a>
 	</header>
@@ -18,6 +17,7 @@
 	<main>
 		{{content}}
 	</main>
+    <hr />
 	<footer>Footer</footer>
 </body>
 

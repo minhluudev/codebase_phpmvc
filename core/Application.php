@@ -14,6 +14,7 @@ class Application
     public Request $request;
     public Controller $controller;
     public ServiceContainer $container;
+    public Session $session;
 
     public function __construct($rootPath)
     {
@@ -23,6 +24,7 @@ class Application
         $this->request = new Request();
         $this->route = new Route();
         $this->container = new ServiceContainer();
+        $this->session = new Session();
     }
 
     /**

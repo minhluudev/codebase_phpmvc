@@ -1,20 +1,18 @@
 <?php
 
-use App\HTTP\Controllers\ArticleController;
-use App\HTTP\Controllers\AuthController;
-use App\HTTP\Controllers\HomeController;
-use Core\Request;
+use App\HTTP\Controllers\Admin\OverviewController;
+use App\HTTP\Controllers\Web\AuthController;
+use App\HTTP\Controllers\Web\HomeController;
 use Core\Routing\Route;
 
-Route::get('/', [HomeController::class, 'index'], ['auth']);
-Route::get('articles', [ArticleController::class, 'index']);
+// Web routes
+Route::get('/', [HomeController::class, 'index']);
 Route::get('login', [AuthController::class, 'login']);
+Route::post('login', [AuthController::class, 'handleLogin']);
 Route::get('register', [AuthController::class, 'register']);
 Route::post('register', [AuthController::class, 'register']);
-Route::get('register/:id', function (Request $request, $id) {
-    echo '<pre>';
-    echo 'Register with id' . PHP_EOL;
-    var_dump($request->all());
-    echo $id;
-    echo '</pre>';
-});
+
+// Admin routes
+Route::group('admin', function () {
+    Route::get('/', [OverviewController::class, 'index']);
+}, ['auth']);
