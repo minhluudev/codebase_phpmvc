@@ -6,6 +6,9 @@ class Request
 {
 	public const GET_METHOD = 'get';
 	public const POST_METHOD = 'post';
+    public const PUT_METHOD = 'put';
+    public const PATCH_METHOD = 'patch';
+    public const DELETE_METHOD = 'delete';
 
 	public function method(): string
 	{

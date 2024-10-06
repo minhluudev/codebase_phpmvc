@@ -267,4 +267,20 @@ class ResolveRoute
             }
         }
     }
+
+    public static function convertPath(string $path, array $middlewares = []): string
+    {
+        if (isset(self::$middlewares[self::$prefix])) {
+            $middlewares = array_merge(self::$middlewares[self::$prefix], $middlewares);
+        }
+
+        if (!$path || $path === '/') {
+            $path = self::$prefix;
+        } else {
+            $path = trim($path, '/');
+            $path = self::$prefix . "/$path";
+        }
+
+        return preg_replace('/\/+/', '/', $path);
+    }
 }

@@ -27,20 +27,7 @@ class Route extends ResolveRoute implements RouteCollectionInterface
      */
     public static function get(string $path, mixed $action, array $middlewares = []): void
     {
-        // Initialize the middlewares.
-        if (isset(self::$middlewares[self::$prefix])) {
-            $middlewares = array_merge(self::$middlewares[self::$prefix], $middlewares);
-        }
-
-        if (!$path || $path === '/') {
-            $path = self::$prefix;
-        } else {
-            $path = trim($path, '/');
-            $path = self::$prefix . "/$path";
-        }
-
-        $path = preg_replace('/\/+/', '/', $path);
-        // Save the route.
+        $path = self::convertPath($path, $middlewares);
         self::$routes[Request::GET_METHOD][$path] = ['action' => $action, 'middlewares' => $middlewares];
     }
 
@@ -58,21 +45,44 @@ class Route extends ResolveRoute implements RouteCollectionInterface
      */
     public static function post(string $path, mixed $action, array $middlewares = []): void
     {
-        // Initialize the middlewares.
-        if (isset(self::$middlewares[self::$prefix])) {
-            $middlewares = array_merge(self::$middlewares[self::$prefix], $middlewares);
-        }
-
-        if (!$path || $path === '/') {
-            $path = self::$prefix;
-        } else {
-            $path = trim($path, '/');
-            $path = self::$prefix . "/$path";
-        }
-
-        $path = preg_replace('/\/+/', '/', $path);
-        // Save the route.
+        $path = self::convertPath($path, $middlewares);
         self::$routes[Request::POST_METHOD][$path] = ['action' => $action, 'middlewares' => $middlewares];
+    }
+
+    /**
+     * @param string $path
+     * @param mixed $action
+     * @param array $middlewares
+     * @return void
+     */
+    public static function put(string $path, mixed $action, array $middlewares = []): void
+    {
+        $path = self::convertPath($path, $middlewares);
+        self::$routes[Request::PUT_METHOD][$path] = ['action' => $action, 'middlewares' => $middlewares];
+    }
+
+    /**
+     * @param string $path
+     * @param mixed $action
+     * @param array $middlewares
+     * @return void
+     */
+    public static function path(string $path, mixed $action, array $middlewares = []): void
+    {
+        $path = self::convertPath($path, $middlewares);
+        self::$routes[Request::PATCH_METHOD][$path] = ['action' => $action, 'middlewares' => $middlewares];
+    }
+
+    /**
+     * @param string $path
+     * @param mixed $action
+     * @param array $middlewares
+     * @return void
+     */
+    public static function delete(string $path, mixed $action, array $middlewares = []): void
+    {
+        $path = self::convertPath($path, $middlewares);
+        self::$routes[Request::DELETE_METHOD][$path] = ['action' => $action, 'middlewares' => $middlewares];
     }
 
     /**
