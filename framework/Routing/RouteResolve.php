@@ -5,7 +5,16 @@ namespace Framework\Routing;
 use Exception;
 use Framework\App;
 use Framework\Routing\Interfaces\RouteResolveInterface;
+use ReflectionException;
 
+/**
+ * Class RouteResolve
+ *
+ * This class is responsible for resolving routes in the application.
+ * It maps paths and middlewares to routes and resolves them based on the request method and URI.
+ *
+ * @package Framework\Routing
+ */
 class RouteResolve implements RouteResolveInterface
 {
     public const GET = 'GET';
@@ -69,6 +78,7 @@ class RouteResolve implements RouteResolveInterface
      * @param array $routes The routes to resolve.
      *
      * @return void
+     * @throws ReflectionException
      */
     private function resolveRoute(array $routes): void
     {
@@ -84,13 +94,14 @@ class RouteResolve implements RouteResolveInterface
     /**
      * Resolve the route with a normal path.
      *
-     * This method takes a route and resolves it with a normal path. It calls
-     * the action of the route and passes the arguments to it.
+     * This method takes an array of routes and resolves the route with a normal
+     * path. It calls the action of the route and passes the arguments to it.
      *
      * @param array $route The route to resolve.
      * @param array $args The arguments to pass to the action.
      *
      * @return void
+     * @throws ReflectionException
      */
     private function resolveWithNormalPath(array $route, array $args = []): void
     {
@@ -98,7 +109,8 @@ class RouteResolve implements RouteResolveInterface
         $middlewares = $route['middlewares'];
         // TODO: handle middlewares
         if (is_array($action)) {
-            $action[0] = new $action[0];
+            $dependencies = DependencyInjection::resolveDependencies($action[0]);
+            $action[0] = new $action[0](...$dependencies);
         }
 
         call_user_func($action, ...$args);
@@ -114,6 +126,7 @@ class RouteResolve implements RouteResolveInterface
      * @param array $routes The routes to resolve.
      *
      * @return void
+     * @throws ReflectionException
      */
     private function resolveWithRegexPath(array $routes): void
     {

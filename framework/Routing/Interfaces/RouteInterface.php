@@ -11,4 +11,8 @@ interface RouteInterface
     public static function get(string $path, mixed $action, array $middlewares = []): void;
 
     public static function post(string $path, mixed $action, array $middlewares = []): void;
+
+    public static function put(string $path, mixed $action, array $middlewares = []): void;
+
+    public static function delete(string $path, mixed $action, array $middlewares = []): void;
 }
