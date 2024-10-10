@@ -2,6 +2,8 @@
 
 namespace Framework;
 
+use Exception;
+use Framework\Requests\Request;
 use Framework\Routing\Route;
 
 class App
@@ -41,12 +43,22 @@ class App
      */
     public Container $container;
 
+    /**
+     * The request instance.
+     *
+     * This property holds the instance of the Request class.
+     *
+     * @var Request
+     */
+    public Request $request;
+
     public function __construct($basePath)
     {
         self::$basePath = $basePath;
         self::$app = $this;
         $this->route = new Route();
         $this->container = new Container();
+        $this->request = new Request();
     }
 
     /**
@@ -56,6 +68,7 @@ class App
      * initialization and handling the incoming request.
      *
      * @return void
+     * @throws Exception
      */
     public function run(): void
     {

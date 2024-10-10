@@ -12,6 +12,5 @@ class RouteServiceProvider extends ServiceProvider
         Route::group(function () {
             include basePath("/routes/web.php");
         });
-
     }
 }
