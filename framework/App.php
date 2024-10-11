@@ -23,7 +23,7 @@ class App
      *
      * @var App
      */
-    public static $app;
+    public static App $app;
 
     /**
      * The routing instance.
