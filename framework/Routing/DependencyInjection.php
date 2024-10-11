@@ -15,16 +15,17 @@ use ReflectionException;
  */
 class DependencyInjection implements DependencyInjectionInterface
 {
-
     /**
-     * Resolve the dependencies.
+     * Resolve the dependencies for a given class or object.
      *
-     * This method resolves the dependencies of the object or class passed to it.
+     * This method uses reflection to inspect the constructor of the given class or object
+     * and resolves its dependencies. It recursively resolves dependencies for each parameter
+     * in the constructor, creating instances of the required classes.
      *
-     * @param mixed $objectOrClass The object or class to resolve the dependencies of.
+     * @param mixed $objectOrClass The class name or object to resolve dependencies for.
      *
-     * @return array
-     * @throws ReflectionException
+     * @return array An array of resolved dependencies.
+     * @throws ReflectionException If the class does not exist or cannot be reflected.
      */
     public static function resolveDependencies(mixed $objectOrClass): array
     {
@@ -36,12 +37,16 @@ class DependencyInjection implements DependencyInjectionInterface
         }
 
         $constructor = $reflection->getConstructor();
+        if (!$constructor) {
+            return [];
+        }
+
         $params = $constructor->getParameters();
 
         foreach ($params as $param) {
             $type = (string)$param->getType();
             if ($type && class_exists($type)) {
-                $dependencies[] = new $type();
+                $dependencies[] = new $type(...self::resolveDependencies($type));
             }
         }
 
