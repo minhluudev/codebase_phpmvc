@@ -1,15 +1,16 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use Core\Application;
 use Dotenv\Dotenv;
+use Framework\App;
 
 $dotenv = Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->safeLoad();
 
-$app = new Application(dirname(__DIR__));
 try {
+    $app = new App(dirname(__DIR__));
     $app->run();
-} catch (ReflectionException $e) {
+} catch (Exception $e) {
     echo $e->getMessage();
 }
+
