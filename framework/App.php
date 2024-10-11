@@ -86,7 +86,8 @@ class App
      */
     public function registerHelpers(): void
     {
-        include self::$basePath . '/framework/Helper/Utils.php';
+        include_once self::$basePath . '/framework/Helper/Utils.php';
+        include_once self::$basePath . '/framework/Helper/View.php';
     }
 
     /**

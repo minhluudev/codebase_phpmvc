@@ -113,7 +113,7 @@ class RouteResolve implements RouteResolveInterface
             $action[0] = new $action[0](...$dependencies);
         }
 
-        call_user_func($action, ...$args);
+        echo call_user_func($action, ...$args);
     }
 
     /**
