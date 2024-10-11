@@ -84,6 +84,22 @@ Updating...
         // Define route here
     }, ['auth']);
     ```
+  - Other way to define route
+    ```php
+    Route::get('/', function () {
+        return 'Home page';
+    });
+    // Add auth middleware
+    Route::get('/', function () {
+        return 'Home page';
+    }, ['auth']);
+    ```
+  - Route with parameter
+    ```php
+    Route::get('/user/:id', function ($id) {
+        return 'User id: ' . $id;
+    });
+    ```
 ## 3. View
 
 - Define view in folder `resources/views`
