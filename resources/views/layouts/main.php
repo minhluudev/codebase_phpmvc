@@ -6,10 +6,6 @@
     <title><?= setSection('title') ?></title>
 </head>
 <body>
-<header>
-    header
-</header>
-<br/>
 <?= setSection('content') ?>
 </body>
 </html>

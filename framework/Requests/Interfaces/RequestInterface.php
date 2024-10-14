@@ -2,8 +2,7 @@
 
 namespace Framework\Requests\Interfaces;
 
-interface RequestInterface
-{
+interface RequestInterface {
     /**
      * Get the HTTP request method.
      *

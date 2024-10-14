@@ -1,5 +1,9 @@
 <?php
-$viewData = ['layout' => '', 'sections' => [], 'currentSection' => null];
+
+$viewData = ['layout'         => '',
+             'sections'       => [],
+             'currentSection' => null
+];
 
 /**
  * Set the layout for the view.
@@ -7,12 +11,11 @@ $viewData = ['layout' => '', 'sections' => [], 'currentSection' => null];
  * This function sets the layout file to be used for the view rendering. The layout file
  * is specified relative to the `resources/views` directory.
  *
- * @param string $view The name of the layout file (without the `.php` extension).
+ * @param  string  $view  The name of the layout file (without the `.php` extension).
  *
  * @return void
  */
-function layout(string $view): void
-{
+function layout(string $view): void {
     global $viewData;
     $viewData['layout'] = basePath("/resources/views/{$view}.php");
 }
@@ -27,8 +30,7 @@ function layout(string $view): void
  *
  * @return void
  */
-function layoutEnd(): void
-{
+function layoutEnd(): void {
     global $viewData;
     include_once $viewData['layout'];
 }
@@ -40,13 +42,12 @@ function layoutEnd(): void
  * If the content is a callable, it will be executed and its output will be captured.
  * Otherwise, the content will be converted to a string.
  *
- * @param string $name The name of the section.
- * @param mixed $content The content of the section. It can be a string or a callable.
+ * @param  string  $name  The name of the section.
+ * @param  mixed   $content  The content of the section. It can be a string or a callable.
  *
  * @return void
  */
-function section(string $name, mixed $content = null): void
-{
+function section(string $name, mixed $content = null): void {
     if (!$content) {
         return;
     }
@@ -56,7 +57,7 @@ function section(string $name, mixed $content = null): void
         $content();
         $content = ob_get_clean();
     } else {
-        $content = (string)$content;
+        $content = (string) $content;
     }
 
     global $viewData;
@@ -69,12 +70,11 @@ function section(string $name, mixed $content = null): void
  * This function begins capturing output for a new section. The section name is specified
  * as a parameter, and the output is buffered until `sectionEnd` is called.
  *
- * @param string $name The name of the section to start.
+ * @param  string  $name  The name of the section to start.
  *
  * @return void
  */
-function sectionStart(string $name): void
-{
+function sectionStart(string $name): void {
     global $viewData;
     $viewData['currentSection'] = $name;
     ob_start();
@@ -89,12 +89,11 @@ function sectionStart(string $name): void
  *
  * @return void
  */
-function sectionEnd(): void
-{
+function sectionEnd(): void {
     global $viewData;
-    $currentSection = $viewData['currentSection'];
+    $currentSection                        = $viewData['currentSection'];
     $viewData['sections'][$currentSection] = ob_get_clean();
-    $viewData['currentSection'] = null;
+    $viewData['currentSection']            = null;
 }
 
 /**
@@ -103,12 +102,13 @@ function sectionEnd(): void
  * This function returns the content of a section specified by its name.
  * If the section does not exist, it returns an empty string.
  *
- * @param string $name The name of the section to retrieve.
+ * @param  string  $name  The name of the section to retrieve.
+ *
  * @return string The content of the section, or an empty string if the section does not exist.
  */
-function setSection(string $name): string
-{
+function setSection(string $name): string {
     global $viewData;
+
     return $viewData['sections'][$name] ?? '';
 }
 
@@ -119,15 +119,15 @@ function setSection(string $name): string
  * It extracts the provided data array into variables, starts output buffering,
  * includes the view file, and then returns the buffered output as a string.
  *
- * @param string $view The name of the view file (without the `.php` extension).
- * @param array $data An associative array of data to be extracted into the view.
+ * @param  string  $view  The name of the view file (without the `.php` extension).
+ * @param  array   $data  An associative array of data to be extracted into the view.
  *
  * @return string The rendered view content.
  */
-function view(string $view, array $data = []): string
-{
+function view(string $view, array $data = []): string {
     extract($data);
     ob_start();
     include_once basePath("/resources/views/{$view}.php");
+
     return ob_get_clean();
 }

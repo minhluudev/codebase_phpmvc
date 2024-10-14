@@ -1,8 +1,8 @@
 <?php layout('layouts/main'); ?>
-<?php section('title', $title ?? ''); ?>
+<?php section('title', 'Home page'); ?>
 <?php sectionStart('content'); ?>
     <h1>Home page</h1>
-    <?= $title ?? '' ?>
+<?= $title ?? '' ?>
 <?php sectionEnd(); ?>
 
 <?php layoutEnd(); ?>

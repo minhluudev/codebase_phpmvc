@@ -2,14 +2,15 @@
 
 namespace App\HTTP\Controllers\Web;
 
-use App\HTTP\Controllers\Controller;
+use App\Services\BlogCategoryService;
+use App\Services\BlogPostService;
+use App\Services\ProductService;
 
-class HomeController extends Controller
+class HomeController
 {
+
     public function index()
     {
-        return $this->renderView('web/home', [
-            'title' => 'Home'
-        ]);
+        return view('home', ['title' => 'Home title']);
     }
 }

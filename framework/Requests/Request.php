@@ -4,8 +4,7 @@ namespace Framework\Requests;
 
 use Framework\Requests\Interfaces\RequestInterface;
 
-class Request implements RequestInterface
-{
+class Request implements RequestInterface {
     /**
      * Get the HTTP request method.
      *
@@ -14,8 +13,7 @@ class Request implements RequestInterface
      *
      * @return string The HTTP request method in uppercase.
      */
-    public function method(): string
-    {
+    public function method(): string {
         return strtoupper($_SERVER['REQUEST_METHOD']);
     }
 
@@ -27,9 +25,10 @@ class Request implements RequestInterface
      *
      * @return string The URI of the request.
      */
-    public function uri(): string
-    {
-        if ($_SERVER['REQUEST_URI'] === '/') return '/';
+    public function uri(): string {
+        if ($_SERVER['REQUEST_URI'] === '/') {
+            return '/';
+        }
 
         return trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
     }

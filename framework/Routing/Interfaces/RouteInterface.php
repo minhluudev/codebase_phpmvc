@@ -2,8 +2,7 @@
 
 namespace Framework\Routing\Interfaces;
 
-interface RouteInterface
-{
+interface RouteInterface {
     public static function prefix(string $name, mixed $callback, array $middlewares = []): void;
 
     public static function group(mixed $callback, array $middlewares = []): void;

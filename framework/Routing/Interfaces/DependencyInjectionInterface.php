@@ -2,7 +2,6 @@
 
 namespace Framework\Routing\Interfaces;
 
-interface DependencyInjectionInterface
-{
+interface DependencyInjectionInterface {
     public static function resolveDependencies(mixed $objectOrClass): array;
 }

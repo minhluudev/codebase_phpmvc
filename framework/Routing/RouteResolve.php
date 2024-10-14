@@ -15,15 +15,14 @@ use ReflectionException;
  *
  * @package Framework\Routing
  */
-class RouteResolve implements RouteResolveInterface
-{
-    public const GET = 'GET';
-    public const POST = 'POST';
-    public const PUT = 'PUT';
+class RouteResolve implements RouteResolveInterface {
+    public const GET    = 'GET';
+    public const POST   = 'POST';
+    public const PUT    = 'PUT';
     public const DELETE = 'DELETE';
-    protected static string $prefix = '';
-    protected static array $routes = [];
-    protected static array $middlewares = [];
+    protected static string $prefix      = '';
+    protected static array  $routes      = [];
+    protected static array  $middlewares = [];
 
     /**
      * Map the path and middleware.
@@ -31,20 +30,22 @@ class RouteResolve implements RouteResolveInterface
      * This method takes a request method, a path, an action, and an array of
      * middlewares, and maps them to the routes array.
      *
-     * @param string $method The request method.
-     * @param string $path The path to map.
-     * @param mixed $action The action to map.
-     * @param array $middlewares The middlewares to map.
+     * @param  string  $method  The request method.
+     * @param  string  $path  The path to map.
+     * @param  mixed   $action  The action to map.
+     * @param  array   $middlewares  The middlewares to map.
      *
      * @return void
      */
-    public static function mapPathAndMiddleware(string $method, string $path, mixed $action, array $middlewares = []): void
-    {
-        $path = trim($path, '/');
-        $path = self::$prefix . "/$path";
-        $path = $path === '/' ? $path : trim($path, '/');
-        $middlewares = array_merge(self::$middlewares[self::$prefix] ?? [], $middlewares);
-        self::$routes[$method][$path] = ['action' => $action, 'middlewares' => $middlewares];
+    public static function mapPathAndMiddleware(string $method, string $path, mixed $action, array $middlewares = []): void {
+        $path                         = trim($path, '/');
+        $path                         = self::$prefix."/$path";
+        $path                         = $path === '/' ? $path : trim($path, '/');
+        $middlewares                  = array_merge(self::$middlewares[self::$prefix] ?? [], $middlewares);
+        self::$routes[$method][$path] = [
+            'action'      => $action,
+            'middlewares' => $middlewares
+        ];
     }
 
     /**
@@ -57,8 +58,7 @@ class RouteResolve implements RouteResolveInterface
      * @return void
      * @throws Exception
      */
-    public function resolve(): void
-    {
+    public function resolve(): void {
         $method = App::$app->request->method();
         $routes = self::$routes[$method];
         if (!$routes) {
@@ -75,13 +75,12 @@ class RouteResolve implements RouteResolveInterface
      * if the route is a normal path or a regex path and calls the appropriate
      * method to resolve the route.
      *
-     * @param array $routes The routes to resolve.
+     * @param  array  $routes  The routes to resolve.
      *
      * @return void
      * @throws ReflectionException
      */
-    private function resolveRoute(array $routes): void
-    {
+    private function resolveRoute(array $routes): void {
         $uri = App::$app->request->uri();
 
         if (isset($routes[$uri])) {
@@ -97,20 +96,19 @@ class RouteResolve implements RouteResolveInterface
      * This method takes an array of routes and resolves the route with a normal
      * path. It calls the action of the route and passes the arguments to it.
      *
-     * @param array $route The route to resolve.
-     * @param array $args The arguments to pass to the action.
+     * @param  array  $route  The route to resolve.
+     * @param  array  $args  The arguments to pass to the action.
      *
      * @return void
      * @throws ReflectionException
      */
-    private function resolveWithNormalPath(array $route, array $args = []): void
-    {
-        $action = $route['action'];
+    private function resolveWithNormalPath(array $route, array $args = []): void {
+        $action      = $route['action'];
         $middlewares = $route['middlewares'];
         // TODO: handle middlewares
         if (is_array($action)) {
             $dependencies = DependencyInjection::resolveDependencies($action[0]);
-            $action[0] = new $action[0](...$dependencies);
+            $action[0]    = new $action[0](...$dependencies);
         }
 
         echo call_user_func($action, ...$args);
@@ -123,20 +121,19 @@ class RouteResolve implements RouteResolveInterface
      * path. It matches the URL against the route patterns and extracts the
      * arguments from the URL.
      *
-     * @param array $routes The routes to resolve.
+     * @param  array  $routes  The routes to resolve.
      *
      * @return void
      * @throws ReflectionException
      */
-    private function resolveWithRegexPath(array $routes): void
-    {
+    private function resolveWithRegexPath(array $routes): void {
         $uri = App::$app->request->uri();
 
         $dataMatched = $this->matchRouteData($routes, $uri);
 
         if ($dataMatched) {
             $action = $routes[$dataMatched['path']];
-            $args = $dataMatched['args'] ?? [];
+            $args   = $dataMatched['args'] ?? [];
             $this->resolveWithNormalPath($action, $args);
         } else {
             echo '404';
@@ -150,14 +147,13 @@ class RouteResolve implements RouteResolveInterface
      * URL against these patterns. If the URL matches a pattern, it extracts
      * the arguments from the URL.
      *
-     * @param array $paths The route patterns to match against.
-     * @param string $url The URL to match.
+     * @param  array   $paths  The route patterns to match against.
+     * @param  string  $url  The URL to match.
      *
      * @return array|null The matched route data if the URL matches a pattern, null otherwise.
      */
-    private function matchRouteData(array $paths, string $url): array|null
-    {
-        $args = false;
+    private function matchRouteData(array $paths, string $url): array | null {
+        $args   = false;
         $router = null;
 
         foreach ($paths as $path => $route) {
@@ -168,7 +164,10 @@ class RouteResolve implements RouteResolveInterface
             }
         }
 
-        return $args && $router ? ['path' => $router, 'args' => $args] : null;
+        return $args && $router ? [
+            'path' => $router,
+            'args' => $args
+        ] : null;
     }
 
     /**
@@ -178,14 +177,13 @@ class RouteResolve implements RouteResolveInterface
      * to a regex pattern, and matches the URL against this pattern. If the URL
      * matches the pattern, it extracts the arguments from the URL.
      *
-     * @param string $url The URL to match.
-     * @param string $patch The route pattern to match against.
+     * @param  string  $url  The URL to match.
+     * @param  string  $patch  The route pattern to match against.
      *
      * @return array|null The extracted arguments if the URL matches the pattern, null otherwise.
      */
-    private function argsMatched(string $url, string $patch): ?array
-    {
-        $args = null;
+    private function argsMatched(string $url, string $patch): ?array {
+        $args    = null;
         $pattern = $this->convertPathToPattern($patch);
 
         if (preg_match($pattern, $url, $matches)) {
@@ -204,14 +202,13 @@ class RouteResolve implements RouteResolveInterface
      * (denoted by a colon followed by a word, e.g., `:id`) with a regex
      * pattern that matches any word character.
      *
-     * @param string $route The route path to convert.
+     * @param  string  $route  The route path to convert.
      *
      * @return string The regex pattern.
      */
-    private function convertPathToPattern(string $route): string
-    {
+    private function convertPathToPattern(string $route): string {
         $pattern = preg_replace('/(:\w+)/', '(\w+)', $route);
 
-        return '/^' . str_replace('/', '\/', $pattern) . '\/?(\/)?$/';
+        return '/^'.str_replace('/', '\/', $pattern).'\/?(\/)?$/';
     }
 }

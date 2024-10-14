@@ -2,12 +2,10 @@
 
 namespace Framework;
 
-class ServiceProvider
-{
+class ServiceProvider {
     protected array $services = [];
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->register();
     }
 
@@ -16,8 +14,7 @@ class ServiceProvider
      *
      * @return void
      */
-    public function register(): void
-    {
+    public function register(): void {
         $container = App::$app->container;
 
         foreach ($this->services as $name => $service) {

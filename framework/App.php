@@ -3,11 +3,11 @@
 namespace Framework;
 
 use Exception;
+use Framework\Databases\DB;
 use Framework\Requests\Request;
 use Framework\Routing\Route;
 
-class App
-{
+class App {
     /**
      * The root path of the application.
      *
@@ -52,13 +52,15 @@ class App
      */
     public Request $request;
 
-    public function __construct($basePath)
-    {
-        self::$basePath = $basePath;
-        self::$app = $this;
-        $this->route = new Route();
+    public DB $db;
+
+    public function __construct($basePath) {
+        self::$basePath  = $basePath;
+        self::$app       = $this;
+        $this->route     = new Route();
         $this->container = new Container();
-        $this->request = new Request();
+        $this->request   = new Request();
+        $this->db        = new DB();
     }
 
     /**
@@ -70,9 +72,9 @@ class App
      * @return void
      * @throws Exception
      */
-    public function run(): void
-    {
+    public function run(): void {
         $this->registerHelpers();
+        $this->db->connectToDatabase();
         $this->registerServiceProviders();
         $this->route->resolve();
     }
@@ -84,10 +86,9 @@ class App
      *
      * @return void
      */
-    public function registerHelpers(): void
-    {
-        include_once self::$basePath . '/framework/Helper/Utils.php';
-        include_once self::$basePath . '/framework/Helper/View.php';
+    public function registerHelpers(): void {
+        include_once self::$basePath.'/framework/Helper/Utils.php';
+        include_once self::$basePath.'/framework/Helper/View.php';
     }
 
     /**
@@ -98,9 +99,8 @@ class App
      *
      * @return void
      */
-    public function registerServiceProviders(): void
-    {
-        $config = include_once self::$basePath . '/config/app.php';
+    public function registerServiceProviders(): void {
+        $config    = include_once self::$basePath.'/config/app.php';
         $providers = $config['providers'];
 
         foreach ($providers as $provider) {
