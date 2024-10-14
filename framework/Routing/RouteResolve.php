@@ -6,6 +6,8 @@ use Exception;
 use Framework\App;
 use Framework\Routing\Interfaces\RouteResolveInterface;
 use ReflectionException;
+use ReflectionFunction;
+use ReflectionMethod;
 
 /**
  * Class RouteResolve
@@ -107,11 +109,55 @@ class RouteResolve implements RouteResolveInterface {
         $middlewares = $route['middlewares'];
         // TODO: handle middlewares
         if (is_array($action)) {
+            $request      = self::getRequestWithMethodCallback($action);
             $dependencies = DependencyInjection::resolveDependencies($action[0]);
             $action[0]    = new $action[0](...$dependencies);
+        } else {
+            $request = self::getRequestWithFunctionCallback($action);
         }
 
-        echo call_user_func($action, ...$args);
+        echo call_user_func($action, $request, ...$args);
+    }
+
+    private static function getRequestWithMethodCallback($callback) {
+        $params         = self::getParametersTypeMethodOrFunction($callback[1], $callback[0]);
+        $paramFirstType = $params[0] ?? null;
+        if ($paramFirstType && class_exists($paramFirstType)) {
+            return new $paramFirstType();
+        }
+
+        return App::$app->request;
+    }
+
+    private static function getParametersTypeMethodOrFunction($method, $className = null): array {
+        $paramTypes = [];
+
+        if ($className) {
+            $reflection = new ReflectionMethod($className, $method);
+        } else {
+            $reflection = new ReflectionFunction($method);
+        }
+
+        $params = $reflection->getParameters();
+        foreach ($params as $param) {
+            $type = $param->getType();
+
+            if ($type !== null) {
+                $paramTypes[] = $type->getName();
+            }
+        }
+
+        return $paramTypes;
+    }
+
+    private static function getRequestWithFunctionCallback($callback) {
+        $params         = self::getParametersTypeMethodOrFunction($callback);
+        $paramFirstType = $params[0] ?? null;
+        if ($paramFirstType && class_exists($paramFirstType)) {
+            return new $paramFirstType();
+        }
+
+        return App::$app->request;
     }
 
     /**

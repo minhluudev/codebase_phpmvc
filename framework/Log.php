@@ -10,7 +10,7 @@ class Log {
 
     private static function fileWrite($content): void {
         $fileName = date('Y-m-d').'.log';
-        $filePath = basePath("/logs/$fileName");
+        $filePath = Helper::basePath("/logs/$fileName");
 
         if (!file_exists($filePath)) {
             $file = fopen($filePath, 'w');

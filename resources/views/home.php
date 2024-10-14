@@ -1,8 +1,14 @@
-<?php layout('layouts/main'); ?>
-<?php section('title', 'Home page'); ?>
-<?php sectionStart('content'); ?>
+<?php
+
+use Framework\View;
+
+View::layout('layouts/main');
+View::section('title', 'Home page');
+?>
+
+<?php View::sectionStart('content'); ?>
     <h1>Home page</h1>
 <?= $title ?? '' ?>
-<?php sectionEnd(); ?>
+<?php View::sectionEnd(); ?>
 
-<?php layoutEnd(); ?>
+<?php View::layoutEnd(); ?>

@@ -2,7 +2,6 @@
 
 namespace Framework\Schemas;
 
-use Core\Schema\Blueprint;
 use Framework\Schemas\Interfaces\SchemaInterface;
 
 class Schema implements SchemaInterface {

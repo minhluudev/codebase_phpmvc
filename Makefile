@@ -5,6 +5,6 @@ start:
 stop:
 	docker compose stop
 migrate:
-	cd database && php migration.php && cd ..
+	docker compose exec app sh -c "cd database && php migration.php"
 migrate-rollback:
-	cd database && php migration_rollback.php && cd ..
+	docker compose exec app sh -c "cd database && php migration_rollback.php"
