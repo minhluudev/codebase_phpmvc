@@ -8,6 +8,6 @@ class AdminController extends Controller
 {
     public function __construct()
     {
-        $this->setViewLayout('admin');
+//        $this->setViewLayout('admin');
     }
 }

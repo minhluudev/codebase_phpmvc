@@ -2,10 +2,8 @@
 
 namespace App\HTTP\Controllers\Admin;
 
-class OverviewController extends AdminController
-{
-    public function index()
-    {
-        return $this->renderView('admin/overview', ['title' => 'Overview']);
+class OverviewController extends AdminController {
+    public function index() {
+        return $this->view('admin/overview', ['title' => 'Overview']);
     }
 }

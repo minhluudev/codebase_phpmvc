@@ -1,5 +1,7 @@
 <?php
 
+use App\HTTP\Controllers\Admin\OverviewController;
+use App\HTTP\Controllers\Web\AuthController;
 use App\HTTP\Controllers\Web\HomeController;
 use Framework\Routing\Route;
 
@@ -12,15 +14,16 @@ use Framework\Routing\Route;
 ////Route::post('register', [AuthController::class, 'register']);
 //
 //// Admin routes
-//Route::prefix('admin', function () {
-//    Route::get('/', [OverviewController::class, 'index']);
-//}, ['auth']);
+
 
 Route::get('/', [HomeController::class, 'index']);
-Route::get('about', function () {
-    echo 'About page';
+Route::get('about', [HomeController::class, 'about']);
+Route::get('login', [AuthController::class, 'login']);
+Route::get('register', [AuthController::class, 'register']);
+Route::get('product/:id/detail', function ($id) {
+    echo 'Product detail page: '.$id;
 });
 
-Route::get('product/:id/detail', function ($id) {
-    echo 'Product detail page: '. $id;
-});
+Route::prefix('admin', function () {
+    Route::get('/', [OverviewController::class, 'index']);
+}, ['auth']);

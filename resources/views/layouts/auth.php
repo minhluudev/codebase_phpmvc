@@ -12,10 +12,7 @@ use Framework\View;
 </head>
 <body>
 <heder>
-    <a href="/">Home</a> |
-    <a href="/about">About</a> |
-    <a href="/login">Login</a> |
-    <a href="/admin">Admin</a>
+    Auth
 </heder>
 <br>
 <?= View::setSection('content') ?>

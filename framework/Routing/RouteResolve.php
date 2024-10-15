@@ -44,10 +44,7 @@ class RouteResolve implements RouteResolveInterface {
         $path                         = self::$prefix."/$path";
         $path                         = $path === '/' ? $path : trim($path, '/');
         $middlewares                  = array_merge(self::$middlewares[self::$prefix] ?? [], $middlewares);
-        self::$routes[$method][$path] = [
-            'action'      => $action,
-            'middlewares' => $middlewares
-        ];
+        self::$routes[$method][$path] = ['action' => $action, 'middlewares' => $middlewares];
     }
 
     /**
@@ -107,7 +104,9 @@ class RouteResolve implements RouteResolveInterface {
     private function resolveWithNormalPath(array $route, array $args = []): void {
         $action      = $route['action'];
         $middlewares = $route['middlewares'];
-        // TODO: handle middlewares
+
+        self::handleMiddleware($middlewares);
+
         if (is_array($action)) {
             $request      = self::getRequestWithMethodCallback($action);
             $dependencies = DependencyInjection::resolveDependencies($action[0]);
@@ -117,6 +116,30 @@ class RouteResolve implements RouteResolveInterface {
         }
 
         echo call_user_func($action, $request, ...$args);
+    }
+
+    /**
+     * Handle the middleware.
+     *
+     * This method iterates over an array of middleware names, retrieves each middleware
+     * from the service container, and executes it. If any middleware cannot be retrieved,
+     * an exception is caught, its message is displayed, and the script exits.
+     *
+     * @param  array  $middlewares  The middlewares to handle.
+     *
+     * @return void
+     */
+    private static function handleMiddleware(array $middlewares): void {
+        $serviceContainer = App::$app->container;
+
+        foreach ($middlewares as $middleware) {
+            try {
+                $serviceContainer->get("middleware:$middleware");
+            } catch ( Exception $e ) {
+                echo $e->getMessage();
+                exit;
+            }
+        }
     }
 
     private static function getRequestWithMethodCallback($callback) {
@@ -210,10 +233,7 @@ class RouteResolve implements RouteResolveInterface {
             }
         }
 
-        return $args && $router ? [
-            'path' => $router,
-            'args' => $args
-        ] : null;
+        return $args && $router ? ['path' => $router, 'args' => $args] : null;
     }
 
     /**
