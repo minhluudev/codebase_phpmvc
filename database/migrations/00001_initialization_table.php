@@ -10,14 +10,23 @@ return new class extends Migration {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('full_name');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->string('password');
             $table->timestamps();
             $table->softDeletes();
         });
+
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name', ['nullable' => true]);
+            $table->timestamps();
+        });
+
+        Schema::create('articles', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor('categories', 'category_id');
+            $table->string('title');
+            $table->string('content');
             $table->timestamps();
         });
     }
@@ -25,5 +34,6 @@ return new class extends Migration {
     public function down(): void {
         Schema::dropIfExists('users');
         Schema::dropIfExists('categories');
+        Schema::dropIfExists('articles');
     }
 };

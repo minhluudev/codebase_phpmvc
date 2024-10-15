@@ -19,8 +19,10 @@ class Blueprint implements BlueprintInterface {
         $this->columns[] = "`$name` INT NOT NULL AUTO_INCREMENT PRIMARY KEY";
     }
 
-    public function string(string $name, int $size = 255): static {
-        $this->columns[] = "`$name` VARCHAR($size)";
+    public function string(string $name, array $properties = []): static {
+        $size            = $properties['size'] ?? 255;
+        $nullable        = isset($properties['nullable']) && $properties['nullable'] ? 'NULL' : 'NOT NULL';
+        $this->columns[] = "`$name` VARCHAR($size) $nullable";
 
         return $this;
     }
@@ -28,30 +30,20 @@ class Blueprint implements BlueprintInterface {
     public function timestamps(): void {
         $this->columns[] = "`created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP";
         $this->columns[] = "`updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP";
-
     }
 
     public function softDeletes(): void {
         $this->columns[] = "`deleted_at` TIMESTAMP NULL";
     }
 
-    public function nullable(bool $status = true): void {
-        $lastItem = array_pop($this->columns);
-
-        if ($status) {
-            $lastItem .= " NULL";
-        } else {
-            $lastItem .= " NOT NULL";
-        }
-
-        $this->columns[] = $lastItem;
-    }
-
-    public function unique(): static {
+    public function unique(): void {
         $lastItem        = array_pop($this->columns);
         $lastItem        .= " UNIQUE";
         $this->columns[] = $lastItem;
+    }
 
-        return $this;
+    public function foreignIdFor(string $table, string $column, array $properties = []): void {
+        $this->columns[] = "`$column` INT NOT NULL";
+        $this->columns[] = "FOREIGN KEY (`$column`) REFERENCES `$table`(`id`)";
     }
 }

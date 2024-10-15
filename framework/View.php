@@ -3,10 +3,9 @@
 namespace Framework;
 
 class View {
-    public static string $layout         = '';
-    public static array  $sections       = [];
-    public static string $currentSection = '';
-
+    private static string $layout         = '';
+    private static array  $sections       = [];
+    private static string $currentSection = '';
 
     /**
      * Set the layout for the view.
@@ -127,5 +126,4 @@ class View {
 
         return ob_get_clean();
     }
-
 }
