@@ -106,29 +106,37 @@ Updating...
 - Extension file is `.php`
 - Example:
   - Layout : `layouts/main.php`
-    ```html
+    ```php
+    <?php
+    use Framework\View;
+    ?>
     <!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title><?= setSection('title') ?></title>
+        <title><?= View::setSection('title') ?></title>
     </head>
     <body>
-    <?= setSection('content') ?>
+    <?= View::setSection('content') ?>
     </body>
     </html>
     ```
   - Page: `home.php`
     ```php
-    <?php layout('layouts/main'); ?>
-    <?php section('title', 'Home page'); ?>
-    <?php sectionStart('content'); ?>
+    <?php
+    use Framework\View;
+    
+    View::layout('layouts/main');
+    View::section('title', 'Home page');
+    ?>
+    
+    <?php View::sectionStart('content'); ?>
         <h1>Home page</h1>
-        <?= $title ?? '' ?>
-    <?php sectionEnd(); ?>
-  
-    <?php layoutEnd(); ?>
+    <?= $title ?? '' ?>
+    <?php View::sectionEnd(); ?>
+    
+    <?php View::layoutEnd(); ?>
     ```
 ## 4. Controller
 - Define controller in folder `app/HTTP/Controllers`
@@ -137,12 +145,14 @@ Updating...
   - Example:
     ```php
     namespace App\HTTP\Controllers;
+    
+    use Framework\Controller;
   
-    class HomeController
+    class HomeController extends Controller
     {
         public function index()
         {
-            return view('home', ['title' => 'Home page']);
+            return $this->view('home', ['title' => 'Home page']);
         }
     }
     ```
