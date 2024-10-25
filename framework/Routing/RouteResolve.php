@@ -22,9 +22,9 @@ class RouteResolve implements RouteResolveInterface {
     public const POST   = 'POST';
     public const PUT    = 'PUT';
     public const DELETE = 'DELETE';
-    protected static string $prefix      = '';
-    protected static array  $routes      = [];
-    protected static array  $middlewares = [];
+    protected string $prefix      = '';
+    protected array  $routes      = [];
+    protected array  $middlewares = [];
 
     /**
      * Map the path and middleware.
@@ -39,12 +39,12 @@ class RouteResolve implements RouteResolveInterface {
      *
      * @return void
      */
-    public static function mapPathAndMiddleware(string $method, string $path, mixed $action, array $middlewares = []): void {
+    public function mapPathAndMiddleware(string $method, string $path, mixed $action, array $middlewares = []): void {
         $path                         = trim($path, '/');
-        $path                         = self::$prefix."/$path";
+        $path                         = $this->prefix."/$path";
         $path                         = $path === '/' ? $path : trim($path, '/');
-        $middlewares                  = array_merge(self::$middlewares[self::$prefix] ?? [], $middlewares);
-        self::$routes[$method][$path] = ['action' => $action, 'middlewares' => $middlewares];
+        $middlewares                  = array_merge($this->middlewares[$this->prefix] ?? [], $middlewares);
+        $this->routes[$method][$path] = ['action' => $action, 'middlewares' => $middlewares];
     }
 
     /**
@@ -59,12 +59,12 @@ class RouteResolve implements RouteResolveInterface {
      */
     public function resolve(): void {
         $method = App::$app->request->method();
-        $routes = self::$routes[$method];
-        if (!$routes) {
+
+        if (!isset($this->routes[$method])) {
             throw new Exception('Route not found');
         }
 
-        $this->resolveRoute($routes);
+        $this->resolveRoute($this->routes[$method]);
     }
 
     /**
@@ -105,14 +105,14 @@ class RouteResolve implements RouteResolveInterface {
         $action      = $route['action'];
         $middlewares = $route['middlewares'];
 
-        self::handleMiddleware($middlewares);
+        $this->handleMiddleware($middlewares);
 
         if (is_array($action)) {
-            $request      = self::getRequestWithMethodCallback($action);
+            $request      = $this->getRequestWithMethodCallback($action);
             $dependencies = DependencyInjection::resolveDependencies($action[0]);
             $action[0]    = new $action[0](...$dependencies);
         } else {
-            $request = self::getRequestWithFunctionCallback($action);
+            $request = $this->getRequestWithFunctionCallback($action);
         }
 
         echo call_user_func($action, $request, ...$args);
@@ -129,7 +129,7 @@ class RouteResolve implements RouteResolveInterface {
      *
      * @return void
      */
-    private static function handleMiddleware(array $middlewares): void {
+    private function handleMiddleware(array $middlewares): void {
         $serviceContainer = App::$app->container;
 
         foreach ($middlewares as $middleware) {
@@ -142,8 +142,8 @@ class RouteResolve implements RouteResolveInterface {
         }
     }
 
-    private static function getRequestWithMethodCallback($callback) {
-        $params         = self::getParametersTypeMethodOrFunction($callback[1], $callback[0]);
+    private function getRequestWithMethodCallback($callback) {
+        $params         = $this->getParametersTypeMethodOrFunction($callback[1], $callback[0]);
         $paramFirstType = $params[0] ?? null;
         if ($paramFirstType && class_exists($paramFirstType)) {
             return new $paramFirstType();
@@ -152,7 +152,7 @@ class RouteResolve implements RouteResolveInterface {
         return App::$app->request;
     }
 
-    private static function getParametersTypeMethodOrFunction($method, $className = null): array {
+    private function getParametersTypeMethodOrFunction($method, $className = null): array {
         $paramTypes = [];
 
         if ($className) {
@@ -173,8 +173,8 @@ class RouteResolve implements RouteResolveInterface {
         return $paramTypes;
     }
 
-    private static function getRequestWithFunctionCallback($callback) {
-        $params         = self::getParametersTypeMethodOrFunction($callback);
+    private function getRequestWithFunctionCallback($callback) {
+        $params         = $this->getParametersTypeMethodOrFunction($callback);
         $paramFirstType = $params[0] ?? null;
         if ($paramFirstType && class_exists($paramFirstType)) {
             return new $paramFirstType();

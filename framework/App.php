@@ -5,7 +5,8 @@ namespace Framework;
 use Exception;
 use Framework\Databases\DB;
 use Framework\Requests\Request;
-use Framework\Routing\Route;
+use Framework\Routing\Router;
+use Framework\Support\Facades\Route;
 
 class App {
     /**
@@ -26,15 +27,6 @@ class App {
     public static App $app;
 
     /**
-     * The routing instance.
-     *
-     * This property holds the instance of the Route class.
-     *
-     * @var Route
-     */
-    public Route $route;
-
-    /**
      * The service container instance.
      *
      * This property holds the instance of the Container class.
@@ -52,13 +44,12 @@ class App {
      */
     public Request $request;
 
-    public DB $db;
+    public DB      $db;
     public Session $session;
 
     public function __construct($basePath) {
         self::$basePath  = $basePath;
         self::$app       = $this;
-        $this->route     = new Route();
         $this->container = new Container();
         $this->request   = new Request();
         $this->db        = new DB();
@@ -76,7 +67,7 @@ class App {
      */
     public function run(): void {
         $this->boot();
-        $this->route->resolve();
+        Route::resolve();
     }
 
     /**
@@ -87,10 +78,20 @@ class App {
      *
      * @return void
      */
-    public function boot(): void {
+    private function boot(): void {
+        $this->registerFacades();
         $this->registerHelpers();
         $this->db->connectToDatabase();
         $this->registerServiceProviders();
+    }
+
+    private function registerFacades(): void {
+        $facades = ['router' => Router::class];
+        foreach ($facades as $name => $facade) {
+            $this->container->set($name, function () use ($facade) {
+                return new $facade();
+            });
+        }
     }
 
     /**
@@ -100,9 +101,9 @@ class App {
      *
      * @return void
      */
-    public function registerHelpers(): void {
-//        include_once self::$basePath.'/framework/Helper/Utils.php';
-//        include_once self::$basePath.'/framework/Helper/view.php';
+    private function registerHelpers(): void {
+        //        include_once self::$basePath.'/framework/Helper/Utils.php';
+        //        include_once self::$basePath.'/framework/Helper/view.php';
     }
 
     /**
@@ -113,7 +114,7 @@ class App {
      *
      * @return void
      */
-    public function registerServiceProviders(): void {
+    private function registerServiceProviders(): void {
         $config    = include_once self::$basePath.'/config/app.php';
         $providers = $config['providers'];
 

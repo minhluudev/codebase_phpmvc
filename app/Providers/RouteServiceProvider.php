@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use Framework\Helper;
-use Framework\Routing\Route;
 use Framework\ServiceProvider;
+use Framework\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {

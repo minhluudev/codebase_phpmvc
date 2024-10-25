@@ -3,7 +3,7 @@
 use App\HTTP\Controllers\Admin\OverviewController;
 use App\HTTP\Controllers\Web\AuthController;
 use App\HTTP\Controllers\Web\HomeController;
-use Framework\Routing\Route;
+use Framework\Support\Facades\Route;
 
 
 //// Web routes
@@ -27,3 +27,4 @@ Route::get('product/:id/detail', function ($id) {
 Route::prefix('admin', function () {
     Route::get('/', [OverviewController::class, 'index']);
 }, ['auth']);
+
