@@ -3,7 +3,7 @@
 
 use Framework\Databases\Migration;
 use Framework\Schemas\Blueprint;
-use Framework\Schemas\Schema;
+use Framework\Support\Facades\Schema;
 
 return new class extends Migration {
     public function up(): void {
@@ -33,7 +33,7 @@ return new class extends Migration {
 
     public function down(): void {
         Schema::dropIfExists('users');
-        Schema::dropIfExists('categories');
         Schema::dropIfExists('articles');
+        Schema::dropIfExists('categories');
     }
 };

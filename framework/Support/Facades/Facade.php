@@ -6,16 +6,28 @@ use Exception;
 use Framework\App;
 
 abstract class Facade {
-    private static $instance;
+    protected static array $instances = [];
+
     /**
      * @throws Exception
      */
     public static function __callStatic(string $method, array $args) {
-        if(!self::$instance) {
-            self::$instance = App::$app->container->get(static::getFacadeAccessor());
+        $instance = static::getFacadeInstance();
+
+        return $instance->$method(...$args);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private static function getFacadeInstance() {
+        $facadeAccessor = static::getFacadeAccessor();
+
+        if (!isset(self::$instances[$facadeAccessor])) {
+            self::$instances[$facadeAccessor] = App::$app->container->get(static::getFacadeAccessor());
         }
 
-        return self::$instance->$method(...$args);
+        return self::$instances[$facadeAccessor];
     }
 
     abstract protected static function getFacadeAccessor(): string;

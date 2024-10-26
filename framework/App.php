@@ -4,8 +4,11 @@ namespace Framework;
 
 use Exception;
 use Framework\Databases\DB;
+use Framework\Log\LogManager;
 use Framework\Requests\Request;
 use Framework\Routing\Router;
+use Framework\Schemas\Schema;
+use Framework\Support\Facades\Log;
 use Framework\Support\Facades\Route;
 
 class App {
@@ -51,9 +54,7 @@ class App {
         self::$basePath  = $basePath;
         self::$app       = $this;
         $this->container = new Container();
-        $this->request   = new Request();
         $this->db        = new DB();
-        $this->session   = new Session();
     }
 
     /**
@@ -66,8 +67,14 @@ class App {
      * @throws Exception
      */
     public function run(): void {
-        $this->boot();
-        Route::resolve();
+        try {
+            $this->request = new Request();
+            $this->session = new Session();
+            $this->boot();
+            Route::resolve();
+        } catch ( Exception $e ) {
+            Log::error($e->getMessage());
+        }
     }
 
     /**
@@ -78,32 +85,21 @@ class App {
      *
      * @return void
      */
-    private function boot(): void {
+    public function boot(): void {
         $this->registerFacades();
-        $this->registerHelpers();
         $this->db->connectToDatabase();
         $this->registerServiceProviders();
     }
 
     private function registerFacades(): void {
-        $facades = ['router' => Router::class];
+        $facades = ['router' => Router::class, 'log' => LogManager::class, 'db' => DB::class,
+                    'schema' => Schema::class];
+
         foreach ($facades as $name => $facade) {
             $this->container->set($name, function () use ($facade) {
                 return new $facade();
             });
         }
-    }
-
-    /**
-     * Register helpers.
-     *
-     * This method registers the helper functions.
-     *
-     * @return void
-     */
-    private function registerHelpers(): void {
-        //        include_once self::$basePath.'/framework/Helper/Utils.php';
-        //        include_once self::$basePath.'/framework/Helper/view.php';
     }
 
     /**

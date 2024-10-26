@@ -4,7 +4,7 @@ namespace Framework\Databases\Traits;
 
 use DirectoryIterator;
 use Framework\Helper;
-use Framework\Schemas\Schema;
+use Framework\Support\Facades\Schema;
 use PDO;
 use PDOException;
 
@@ -69,7 +69,7 @@ trait MigrationTrait {
             }
 
             $pdo->exec("INSERT INTO migrations (migration) VALUES ('".implode("'),('", $values)."');");
-            $pdo->exec(implode(' ', Schema::$sql));
+            $pdo->exec(implode(' ', Schema::getSql()));
 
         } catch ( PDOException $e ) {
             echo $e->getMessage().PHP_EOL;
@@ -78,29 +78,34 @@ trait MigrationTrait {
 
     public function handleRollbackMigrations(PDO $pdo): void {
         echo "Migration rollback start:".PHP_EOL;
-        $migrationDirectory = Helper::basePath("/database/migrations");
-        $oldMigrations      = $this->getMigrations($pdo);
-        if (!count($oldMigrations)) {
+        try {
+            $migrationDirectory = Helper::basePath("/database/migrations");
+            $oldMigrations      = $this->getMigrations($pdo);
+            if (!count($oldMigrations)) {
+                echo 'DONE!'.PHP_EOL;
+
+                return;
+            }
+
+            $migrate      = $oldMigrations[0];
+            $migrateClass = include $migrationDirectory.'/'.$migrate;
+            $migrateClass->down();
+            $this->removeLastMigration($pdo);
+            echo $migrate.PHP_EOL;
             echo 'DONE!'.PHP_EOL;
-
-            return;
+        } catch ( PDOException $e ) {
+            echo $e->getMessage().PHP_EOL;
         }
-
-        $migrate      = $oldMigrations[0];
-        $migrateClass = include $migrationDirectory.'/'.$migrate;
-        $migrateClass->down();
-        $this->removeLastMigration($pdo);
-        echo $migrate.PHP_EOL;
-        echo 'DONE!'.PHP_EOL;
     }
 
     private function removeLastMigration(PDO $pdo): void {
         try {
-            $sql = "DELETE FROM `migrations` WHERE id = (SELECT id FROM (SELECT MAX(id) AS id FROM `migrations`) AS `temp_table`);";
-            $sql .= implode(' ', Schema::$sql);
+            $pdo->beginTransaction();
+            $sql = implode(' ', Schema::getSql());
+            $sql .= "DELETE FROM `migrations` WHERE id = (SELECT id FROM (SELECT MAX(id) AS id FROM `migrations`) AS `temp_table`);";
             $pdo->exec($sql);
         } catch ( PDOException $e ) {
-            echo $e->getMessage().PHP_EOL;
+            throw $e;
         }
     }
 }

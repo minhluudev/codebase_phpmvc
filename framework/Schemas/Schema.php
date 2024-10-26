@@ -5,7 +5,7 @@ namespace Framework\Schemas;
 use Framework\Schemas\Interfaces\SchemaInterface;
 
 class Schema implements SchemaInterface {
-    public static array $sql;
+    private array $sql = [];
 
     /**
      * Create a new table with the specified columns.
@@ -15,10 +15,10 @@ class Schema implements SchemaInterface {
      *
      * @return void
      */
-    public static function create(string $tableName, mixed $callback): void {
+    public function create(string $tableName, mixed $callback): void {
         $table = new Blueprint();
         call_user_func($callback, $table);
-        self::$sql[] = "CREATE TABLE `$tableName` (".implode(',', $table->getColumns()).");";
+        $this->sql[] = "CREATE TABLE `$tableName` (".implode(',', $table->getColumns()).");";
     }
 
     /**
@@ -29,7 +29,7 @@ class Schema implements SchemaInterface {
      *
      * @return void
      */
-    public static function table(string $tableName, mixed $callback): void {
+    public function table(string $tableName, mixed $callback): void {
         $table = new Blueprint();
         call_user_func($callback, $table);
     }
@@ -41,7 +41,11 @@ class Schema implements SchemaInterface {
      *
      * @return void
      */
-    public static function dropIfExists(string $table): void {
-        self::$sql[] = "DROP TABLE IF EXISTS `$table`;";
+    public function dropIfExists(string $table): void {
+        $this->sql[] = "DROP TABLE IF EXISTS `$table`;";
+    }
+
+    public function getSql(): array {
+        return $this->sql;
     }
 }

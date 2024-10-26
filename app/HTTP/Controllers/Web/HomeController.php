@@ -3,6 +3,8 @@
 namespace App\HTTP\Controllers\Web;
 
 use Framework\Controller;
+use Framework\Log\LogManager;
+use Framework\Support\Facades\Log;
 
 class HomeController extends Controller {
     public function index() {
