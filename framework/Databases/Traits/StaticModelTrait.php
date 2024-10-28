@@ -5,20 +5,20 @@ namespace Framework\Databases\Traits;
 use PDOException;
 
 trait StaticModelTrait {
-    private static string $query   = '';
-    private static string $select  = '*';
-    private static string $where   = '';
-    private static array  $orderBy = [];
+    protected static string $query   = '';
+    protected static string $select  = '*';
+    protected static string $where   = '';
+    protected static array  $orderBy = [];
 
     public static function create(array $data) {
-        $instance      = new static();
-        $table         = $instance->getTableName();
-        $fields        = implode('`, `', $instance->fillable);
-        $convertValues = array_map(fn($value) => $data[$value] ?? null, $instance->fillable);
-        $values        = implode("', '", $convertValues);
-        $query         = "INSERT INTO $table (`$fields`) VALUES ('$values')";
-
         try {
+            $instance      = new static();
+            $table         = $instance->getTableName();
+            $fields        = implode('`, `', $instance->fillable);
+            $convertValues = array_map(fn($value) => $data[$value] ?? null, $instance->fillable);
+            $values        = implode("', '", $convertValues);
+            $query         = "INSERT INTO $table (`$fields`) VALUES ('$values')";
+
             $stmt = $instance->pdo->prepare($query);
             $stmt->execute();
             $lastInsertId = $instance->pdo->lastInsertId();
@@ -32,11 +32,11 @@ trait StaticModelTrait {
     }
 
     public static function findById(int $id) {
-        $instance = new static();
-        $table    = $instance->getTableName();
-        $query    = "SELECT * FROM $table WHERE id = $id";
-
         try {
+            $instance = new static();
+            $table    = $instance->getTableName();
+            $query    = "SELECT * FROM $table WHERE id = $id";
+
             $stmt = $instance->pdo->prepare($query);
             $stmt->execute();
 
@@ -48,11 +48,74 @@ trait StaticModelTrait {
         }
     }
 
-    private static function resetProperties(): void {
+    protected static function resetProperties(): void {
         self::$query   = '';
         self::$select  = '*';
         self::$where   = '';
         self::$orderBy = [];
+    }
+
+    public static function update(array $data): bool {
+        try {
+            $instance     = new static();
+            $isSoftDelete = static::isCheckDeleted();
+            $table        = $instance->getTableName();
+            $query        = "UPDATE $table SET ";
+            $filter       = array_filter($data, fn($key) => in_array($key, $instance->fillable), ARRAY_FILTER_USE_KEY);
+            $sets         = array_map(fn($key, $value) => "$key = '$value'", array_keys($filter), $filter);
+            $query        .= implode(', ', $sets);
+            $query        .= ", updated_at = NOW()";
+
+            if (self::$where) {
+                $query .= ' WHERE '.self::$where;
+            }
+
+            if ($isSoftDelete) {
+                if (self::$where) {
+                    $query .= " AND deleted_at IS NULL";
+                } else {
+                    $query .= " WHERE deleted_at IS NULL";
+                }
+            }
+
+            $stmt = $instance->pdo->prepare($query);
+            $stmt->execute();
+
+            return true;
+        } catch ( PDOException $e ) {
+            return false;
+        } finally {
+            self::resetProperties();
+        }
+    }
+
+    public static function isCheckDeleted(): bool {
+        return false;
+    }
+
+    public static function delete(): bool {
+        try {
+            $instance = new static();
+            $table    = $instance->getTableName();
+            if (static::isCheckDeleted()) {
+                $query = "UPDATE $table SET deleted_at = NOW()";
+            } else {
+                $query = "DELETE FROM $table";
+            }
+
+            if (self::$where) {
+                $query .= ' WHERE '.self::$where;
+            }
+
+            $stmt = $instance->pdo->prepare($query);
+            $stmt->execute();
+
+            return true;
+        } catch ( PDOException $e ) {
+            return false;
+        } finally {
+            self::resetProperties();
+        }
     }
 
     public static function all(): static {
@@ -118,19 +181,30 @@ trait StaticModelTrait {
 
     public function get(): array | null {
         try {
-            $select  = self::$select;
-            $where   = self::$where;
-            $orderBy = implode(', ', self::$orderBy);
-            $table   = $this->getTableName();
-            $query   = "SELECT $select FROM $table ";
+            $isSoftDelete = static::isCheckDeleted();
+            $select       = self::$select;
+            $where        = self::$where;
+            $orderBy      = implode(', ', self::$orderBy);
+            $table        = $this->getTableName();
+            $query        = "SELECT $select FROM $table ";
 
             if ($where) {
                 $query .= " WHERE $where";
             }
 
+            if ($isSoftDelete) {
+                if ($where) {
+                    $query .= " AND deleted_at IS NULL";
+                } else {
+                    $query .= " WHERE deleted_at IS NULL";
+                }
+            }
+
             if ($orderBy) {
                 $query .= " ORDER BY $orderBy";
             }
+
+            echo $query;
 
             $stmt = $this->pdo->prepare(str_replace(':table_name', $table, $query));
             $stmt->execute();
@@ -161,7 +235,9 @@ trait StaticModelTrait {
                 $query .= " ORDER BY $orderBy";
             }
 
-            $totalPage = $this->pdo->query($countQuery)->fetchColumn();
+            $totalPage = $this->pdo
+                ->query($countQuery)
+                ->fetchColumn();
             $totalPage = ceil($totalPage / $perPage);
 
             if ($page > $totalPage) {
@@ -170,7 +246,7 @@ trait StaticModelTrait {
 
             $offset = ($page - 1) * $perPage;
             $query  .= " LIMIT $perPage OFFSET $offset";
-            $stmt = $this->pdo->prepare($query);
+            $stmt   = $this->pdo->prepare($query);
             $stmt->execute();
             $data = $stmt->fetchAll();
 
