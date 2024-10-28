@@ -2,13 +2,8 @@
 
 namespace App\Models;
 
-use Core\Model;
+use Framework\Databases\Model;
 
-class User extends Model
-{
-	protected $fillable = [
-		'full_name',
-		'email',
-		'password'
-	];
+class User extends Model {
+    protected array $fillable = ['full_name', 'email', 'password'];
 }

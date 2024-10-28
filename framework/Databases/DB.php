@@ -35,7 +35,7 @@ class DB implements DBInterface {
         try {
             $this->pdo = new PDO("$drive:host=$host;port=$port;dbname=$dbName", $username, $password);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-//            $this->pdo->setAttribute(PDO::ATTR_AUTOCOMMIT, 0);
+            // $this->pdo->setAttribute(PDO::ATTR_AUTOCOMMIT, 0);
             Log::info('Connected to the database');
         } catch ( PDOException $e ) {
             Log::error($e->getMessage());
@@ -47,5 +47,9 @@ class DB implements DBInterface {
             $this->connectToDatabase();
         }
         $this->handleRollbackMigrations($this->pdo);
+    }
+
+    public function getConnection(): PDO {
+        return $this->pdo;
     }
 }
