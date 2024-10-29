@@ -5,13 +5,15 @@ namespace Framework\Databases\Traits;
 use PDOException;
 
 trait StaticModelTrait {
-    protected static string $query   = '';
-    protected static string $select  = '*';
-    protected static string $where   = '';
-    protected static array  $orderBy = [];
-    protected static array  $join    = [];
-    protected static array  $groupBy = [];
-    protected static array  $with    = [];
+    protected static string $query    = '';
+    protected static string $select   = '*';
+    protected static string $where    = '';
+    protected static array  $orderBy  = [];
+    protected static array  $join     = [];
+    protected static array  $groupBy  = [];
+    protected static array  $with     = [];
+    protected static array  $withOne  = [];
+    protected static array  $withMany = [];
 
     public static function create(array $data) {
         try {
@@ -52,13 +54,15 @@ trait StaticModelTrait {
     }
 
     protected static function resetProperties(): void {
-        self::$query   = '';
-        self::$select  = '*';
-        self::$where   = '';
-        self::$orderBy = [];
-        self::$join    = [];
-        self::$groupBy = [];
-        self::$with    = [];
+        self::$query    = '';
+        self::$select   = '*';
+        self::$where    = '';
+        self::$orderBy  = [];
+        self::$join     = [];
+        self::$groupBy  = [];
+        self::$with     = [];
+        self::$withOne  = [];
+        self::$withMany = [];
     }
 
     public static function update(array $data): bool {
@@ -200,6 +204,11 @@ trait StaticModelTrait {
         self::$join[]    = $relation['sql'];
         self::$groupBy[] = "$table.id";
 
+        if ($relation['with'] === 'one') {
+            self::$withOne[$relationTable] = $method;
+        } else {
+            self::$withMany[$relationTable] = $method;
+        }
 
         return $instance;
     }
@@ -236,7 +245,7 @@ trait StaticModelTrait {
             if (!empty(self::$groupBy)) {
                 $query .= " GROUP BY ".implode(', ', self::$groupBy);
             }
-
+            echo $query;
             $stmt = $this->pdo->prepare($query);
             $stmt->execute();
             $result = $stmt->fetchAll();
@@ -256,8 +265,16 @@ trait StaticModelTrait {
 
         foreach ($response as $key => $item) {
             foreach ($item as $column => $value) {
-                if (in_array($column, self::$with)) {
-                    $response[$key][$column] = json_decode($value, true);
+                if (!in_array($column, self::$with)) {
+                    continue;
+                }
+
+                $newColumn = json_decode($value, true);
+
+                if (isset(self::$withOne[$column])) {
+                    $response[$key][self::$withOne[$column]] = $newColumn[0] ?? null;
+                } else {
+                    $response[$key][self::$withMany[$column]] = $newColumn;
                 }
             }
         }
@@ -320,6 +337,14 @@ trait StaticModelTrait {
         self::$with[] = $relatedTable;
 
         return ["sql"          => "LEFT JOIN $relatedTable ON $relatedTable.$foreignKey = $localTable.$localKey",
-                "relatedTable" => $relatedTable,];
+                "relatedTable" => $relatedTable, "with" => "many"];
+    }
+
+    public function hasOne(string $relatedTable, string $foreignKey, string $localKey = 'id'): array {
+        $localTable   = $this->getTableName();
+        self::$with[] = $relatedTable;
+
+        return ["sql"          => "LEFT JOIN $relatedTable ON $relatedTable.$localKey = $localTable.$foreignKey",
+                "relatedTable" => $relatedTable, "with" => "one"];
     }
 }
