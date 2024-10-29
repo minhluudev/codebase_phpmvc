@@ -9,6 +9,9 @@ trait StaticModelTrait {
     protected static string $select  = '*';
     protected static string $where   = '';
     protected static array  $orderBy = [];
+    protected static array  $join    = [];
+    protected static array  $groupBy = [];
+    protected static array  $with    = [];
 
     public static function create(array $data) {
         try {
@@ -53,6 +56,9 @@ trait StaticModelTrait {
         self::$select  = '*';
         self::$where   = '';
         self::$orderBy = [];
+        self::$join    = [];
+        self::$groupBy = [];
+        self::$with    = [];
     }
 
     public static function update(array $data): bool {
@@ -179,6 +185,25 @@ trait StaticModelTrait {
         return $instance;
     }
 
+    public static function with(string $method, array $select = []) {
+        $instance      = new static();
+        $table         = $instance->getTableName();
+        $relation      = $instance->$method();
+        $relationTable = $relation['relatedTable'];
+        if (self::$select === '*') {
+            self::$select = "$table.*";
+        }
+
+        $joinSql = "JSON_ARRAYAGG(JSON_OBJECT(".implode(', ', array_map(fn($column) => "'$column', $relationTable.$column", $select)).")) AS $relationTable";
+
+        self::$select    .= ", $joinSql";
+        self::$join[]    = $relation['sql'];
+        self::$groupBy[] = "$table.id";
+
+
+        return $instance;
+    }
+
     public function get(): array | null {
         try {
             $isSoftDelete = static::isCheckDeleted();
@@ -187,6 +212,10 @@ trait StaticModelTrait {
             $orderBy      = implode(', ', self::$orderBy);
             $table        = $this->getTableName();
             $query        = "SELECT $select FROM $table ";
+
+            if (!empty(self::$join)) {
+                $query .= implode(' ', self::$join);
+            }
 
             if ($where) {
                 $query .= " WHERE $where";
@@ -204,17 +233,36 @@ trait StaticModelTrait {
                 $query .= " ORDER BY $orderBy";
             }
 
-            echo $query;
+            if (!empty(self::$groupBy)) {
+                $query .= " GROUP BY ".implode(', ', self::$groupBy);
+            }
 
-            $stmt = $this->pdo->prepare(str_replace(':table_name', $table, $query));
+            $stmt = $this->pdo->prepare($query);
             $stmt->execute();
+            $result = $stmt->fetchAll();
 
-            return $stmt->fetchAll();
+            return $this->mapRelations($result);
         } catch ( PDOException $e ) {
             return null;
         } finally {
             self::resetProperties();
         }
+    }
+
+    public function mapRelations(array $response): array {
+        if (empty(self::$with)) {
+            return $response;
+        }
+
+        foreach ($response as $key => $item) {
+            foreach ($item as $column => $value) {
+                if (in_array($column, self::$with)) {
+                    $response[$key][$column] = json_decode($value, true);
+                }
+            }
+        }
+
+        return $response;
     }
 
     public function pagination(int $perPage = 10, int $page = 1): array | null {
@@ -226,6 +274,11 @@ trait StaticModelTrait {
             $query      = "SELECT $select FROM $table ";
             $countQuery = str_replace($select, 'COUNT(*)', $query);
 
+            if (!empty(self::$join)) {
+                $query      .= implode(' ', self::$join);
+                $countQuery .= implode(' ', self::$join);
+            }
+
             if ($where) {
                 $query      .= " WHERE $where";
                 $countQuery .= " WHERE $where";
@@ -233,6 +286,10 @@ trait StaticModelTrait {
 
             if ($orderBy) {
                 $query .= " ORDER BY $orderBy";
+            }
+
+            if (!empty(self::$groupBy)) {
+                $query .= " GROUP BY ".implode(', ', self::$groupBy);
             }
 
             $totalPage = $this->pdo
@@ -256,5 +313,13 @@ trait StaticModelTrait {
         } finally {
             self::resetProperties();
         }
+    }
+
+    public function hasMany(string $relatedTable, string $foreignKey, string $localKey = 'id'): array {
+        $localTable   = $this->getTableName();
+        self::$with[] = $relatedTable;
+
+        return ["sql"          => "LEFT JOIN $relatedTable ON $relatedTable.$foreignKey = $localTable.$localKey",
+                "relatedTable" => $relatedTable,];
     }
 }

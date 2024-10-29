@@ -30,5 +30,4 @@ class Model implements ModelInterface {
 
         return Helper::convertToSnakeCaseAndPlural($modelName);
     }
-
 }
