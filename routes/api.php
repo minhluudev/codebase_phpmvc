@@ -1,6 +1,6 @@
 <?php
 
 use App\HTTP\Controllers\Api\CategoryApiController;
-use Core\Routing\Route;
+use Framework\Support\Facades\Route;
 
-Route::get('', [CategoryApiController::class, 'index'], ['auth']);
+Route::get('category', [CategoryApiController::class, 'index']);

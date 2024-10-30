@@ -1,3 +1,6 @@
+<?php
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +14,14 @@
     <fieldset style="width: fit-content; margin: 0 auto;">
         <legend>Register form:</legend>
         <label for="full_name">Full name:</label><br/>
-        <input type="text" name="full_name" id="full_name" required/><br/><br/>
+        <input type="text" name="full_name" id="full_name"
+               value="<?= $data['full_name'] ?? '' ?>"/><br/>
+        <?php
+        if (isset($errors['full_name'])): ?>
+            <span style="color: red;"><?= $errors['full_name'][0] ?></span>
+        <?php
+        endif; ?>
+        <br/>
 
         <label for="email">Email:</label><br/>
         <input type="email" name="email" id="email" required/><br/><br/>

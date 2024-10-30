@@ -9,8 +9,6 @@ use Framework\Controller;
 
 class HomeController extends Controller {
     public function index() {
-//        $categories = Category::select(['categories.id','categories.name'])->with('articles', ['id','title'])->get();
-//        $articles = Article::with('category', ['id', 'name'])->get();
         echo "<pre>";
 //        print_r($categories);
         echo "</pre>";

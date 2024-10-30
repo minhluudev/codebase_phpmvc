@@ -2,7 +2,6 @@
 
 namespace App\HTTP\Middlewares;
 
-
 use Framework\Middleware;
 
 class AuthMiddleware extends Middleware {

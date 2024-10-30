@@ -6,6 +6,7 @@ use Exception;
 use Framework\Databases\DB;
 use Framework\Log\LogManager;
 use Framework\Requests\Request;
+use Framework\Responses\Response;
 use Framework\Routing\Router;
 use Framework\Schemas\Schema;
 use Framework\Support\Facades\Log;
@@ -92,8 +93,8 @@ class App {
     }
 
     private function registerFacades(): void {
-        $facades = ['router' => Router::class, 'log' => LogManager::class, 'db' => DB::class,
-                    'schema' => Schema::class];
+        $facades = ['router'   => Router::class, 'log' => LogManager::class, 'db' => DB::class,
+                    'schema'   => Schema::class, 'response' => Response::class];
 
         foreach ($facades as $name => $facade) {
             $this->container->set($name, function () use ($facade) {

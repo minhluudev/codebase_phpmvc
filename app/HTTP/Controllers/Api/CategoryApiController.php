@@ -2,13 +2,10 @@
 
 namespace App\HTTP\Controllers\Api;
 
-use App\HTTP\Controllers\Controller;
-
-class CategoryApiController extends Controller
-{
-    public function index(): false|string
-    {
+class CategoryApiController extends ApiController {
+    public function index() {
         $data = ['category' => 'CategoryApiController@index'];
+
         return $this->sendResponse($data);
     }
 }

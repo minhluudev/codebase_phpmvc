@@ -20,6 +20,7 @@ Route::get('/', [HomeController::class, 'index']);
 Route::get('about', [HomeController::class, 'about']);
 Route::get('login', [AuthController::class, 'login']);
 Route::get('register', [AuthController::class, 'register']);
+Route::post('register', [AuthController::class, 'register']);
 Route::get('product/:id/detail', function ($id) {
     echo 'Product detail page: '.$id;
 });
