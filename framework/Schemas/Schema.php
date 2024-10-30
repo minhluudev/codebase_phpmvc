@@ -32,6 +32,10 @@ class Schema implements SchemaInterface {
     public function table(string $tableName, mixed $callback): void {
         $table = new Blueprint();
         call_user_func($callback, $table);
+
+        foreach ($table->getColumns() as $column) {
+            $this->sql[] = "ALTER TABLE `$tableName` $column;";
+        }
     }
 
     /**
@@ -45,6 +49,11 @@ class Schema implements SchemaInterface {
         $this->sql[] = "DROP TABLE IF EXISTS `$table`;";
     }
 
+    /**
+     * Get the SQL queries that have been executed.
+     *
+     * @return array
+     */
     public function getSql(): array {
         return $this->sql;
     }

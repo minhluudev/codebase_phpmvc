@@ -1,6 +1,5 @@
 <?php
 
-
 use Framework\Databases\Migration;
 use Framework\Schemas\Blueprint;
 use Framework\Support\Facades\Schema;

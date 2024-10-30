@@ -42,8 +42,24 @@ class Blueprint implements BlueprintInterface {
         $this->columns[] = $lastItem;
     }
 
+    public function new(): void {
+        $lastItem        = array_pop($this->columns);
+        $lastItem        = "ADD COLUMN $lastItem";
+        $this->columns[] = $lastItem;
+    }
+
+    public function change(): void {
+        $lastItem        = array_pop($this->columns);
+        $lastItem        = "MODIFY COLUMN $lastItem";
+        $this->columns[] = $lastItem;
+    }
+
     public function foreignIdFor(string $table, string $column, array $properties = []): void {
         $this->columns[] = "`$column` INT NOT NULL";
         $this->columns[] = "FOREIGN KEY (`$column`) REFERENCES `$table`(`id`)";
+    }
+
+    public function dropColumn(string $name): void {
+        $this->columns[] = "DROP COLUMN `$name`";
     }
 }
