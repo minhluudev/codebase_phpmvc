@@ -2,7 +2,6 @@
 
 namespace App\HTTP\Requests;
 
-
 use Framework\Requests\FormRequest;
 
 class LoginRequest extends FormRequest

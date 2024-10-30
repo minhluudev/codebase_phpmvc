@@ -2,9 +2,7 @@
 
 namespace Framework\Requests;
 
-use Core\Request;
-use Core\Request\ValidationFormTrait;
-
+use Framework\Requests\Traits\ValidationFormTrait;
 
 abstract class FormRequest extends Request {
     use ValidationFormTrait;
