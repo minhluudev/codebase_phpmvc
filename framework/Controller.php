@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework;
+namespace Lumin;
 
 class Controller {
     public function view($view, $params = []): string {

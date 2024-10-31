@@ -1,8 +1,8 @@
 <?php
 
-namespace Framework\Schemas;
+namespace Lumin\Schemas;
 
-use Framework\Schemas\Interfaces\BlueprintInterface;
+use Lumin\Schemas\Interfaces\BlueprintInterface;
 
 class Blueprint implements BlueprintInterface {
     private array $columns;

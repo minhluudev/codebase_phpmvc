@@ -2,7 +2,7 @@
 
 namespace App\HTTP\Middlewares;
 
-use Framework\Middleware;
+use Lumin\Middleware;
 
 class AuthMiddleware extends Middleware {
     public function handle(): void {

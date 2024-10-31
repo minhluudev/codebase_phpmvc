@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework;
+namespace Lumin;
 
 abstract class Middleware {
     public function __construct() {

@@ -2,7 +2,7 @@
 
 namespace App\HTTP\Controllers;
 
-use Framework\Controller as BaseController;
+use Lumin\Controller as BaseController;
 
 class Controller extends BaseController {
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Framework\Schemas;
+namespace Lumin\Schemas;
 
-use Framework\Schemas\Interfaces\SchemaInterface;
+use Lumin\Schemas\Interfaces\SchemaInterface;
 
 class Schema implements SchemaInterface {
     private array $sql = [];

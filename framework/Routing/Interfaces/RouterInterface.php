@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Routing\Interfaces;
+namespace Lumin\Routing\Interfaces;
 
 interface RouterInterface {
     public function prefix(string $name, mixed $callback, array $middlewares = []): void;

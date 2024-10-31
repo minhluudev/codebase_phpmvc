@@ -2,7 +2,7 @@
 
 namespace App\HTTP\Requests;
 
-use Framework\Requests\FormRequest;
+use Lumin\Requests\FormRequest;
 
 class RegisterRequest extends FormRequest
 {

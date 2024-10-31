@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Support\Facades;
+namespace Lumin\Support\Facades;
 
 /**
  * @method  static void info(mixed $message)
@@ -8,7 +8,7 @@ namespace Framework\Support\Facades;
  * @method  static void error(mixed $message)
  * @method  static void debug(mixed $message)
  *
- * @see \Framework\Log\LogManager
+ * @see \Lumin\Log\LogManager
  */
 class Log extends Facade {
     protected static function getFacadeAccessor(): string {

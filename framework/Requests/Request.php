@@ -1,8 +1,8 @@
 <?php
 
-namespace Framework\Requests;
+namespace Lumin\Requests;
 
-use Framework\Requests\Interfaces\RequestInterface;
+use Lumin\Requests\Interfaces\RequestInterface;
 
 class Request implements RequestInterface {
     public const GET_METHOD    = 'GET';

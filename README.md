@@ -1,4 +1,4 @@
-# PHP MVC Framework Lite
+# Lumin Framework
 
 ## I. Environment required
 
@@ -108,7 +108,7 @@ Updating...
   - Layout : `layouts/main.php`
     ```php
     <?php
-    use Framework\View;
+    use Lumin\View;
     ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -125,7 +125,7 @@ Updating...
   - Page: `home.php`
     ```php
     <?php
-    use Framework\View;
+    use Lumin\View;
     
     View::layout('layouts/main');
     View::section('title', 'Home page');
@@ -146,7 +146,7 @@ Updating...
     ```php
     namespace App\HTTP\Controllers;
     
-    use Framework\Controller;
+    use Lumin\Controller;
   
     class HomeController extends Controller
     {

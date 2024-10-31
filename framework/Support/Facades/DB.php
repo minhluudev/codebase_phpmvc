@@ -1,11 +1,11 @@
 <?php
 
-namespace Framework\Support\Facades;
+namespace Lumin\Support\Facades;
 
 /**
  * @method static void connectToDatabase()
  *
- * @see \Framework\Databases\DB
+ * @see \Lumin\Databases\DB
  */
 class DB extends Facade {
     protected static function getFacadeAccessor(): string {

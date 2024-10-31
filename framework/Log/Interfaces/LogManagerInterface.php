@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Log\Interfaces;
+namespace Lumin\Log\Interfaces;
 
 interface LogManagerInterface {
     public function info($message): void;

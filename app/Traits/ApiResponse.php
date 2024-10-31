@@ -2,8 +2,8 @@
 
 namespace App\Traits;
 
-use Framework\Responses\Response as ResponseAlias;
-use Framework\Support\Facades\Response;
+use Lumin\Responses\Response as ResponseAlias;
+use Lumin\Support\Facades\Response;
 
 trait ApiResponse {
     public function sendResponse($data, $message = 'ok', $code = ResponseAlias::HTTP_OK, $extraData = []) {

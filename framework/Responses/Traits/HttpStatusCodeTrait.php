@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Responses\Traits;
+namespace Lumin\Responses\Traits;
 
 trait HttpStatusCodeTrait {
     public const HTTP_CONTINUE                             = 100;

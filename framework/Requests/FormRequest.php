@@ -1,8 +1,8 @@
 <?php
 
-namespace Framework\Requests;
+namespace Lumin\Requests;
 
-use Framework\Requests\Traits\ValidationFormTrait;
+use Lumin\Requests\Traits\ValidationFormTrait;
 
 abstract class FormRequest extends Request {
     use ValidationFormTrait;

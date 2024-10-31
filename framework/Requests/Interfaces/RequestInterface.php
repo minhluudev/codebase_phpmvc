@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Requests\Interfaces;
+namespace Lumin\Requests\Interfaces;
 
 interface RequestInterface {
     /**

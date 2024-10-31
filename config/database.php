@@ -1,7 +1,7 @@
 <?php
 
 
-use Framework\Helper;
+use Lumin\Helper;
 
 return [
     'default'     => Helper::env('DB_CONNECTION', 'mysql'),

@@ -1,9 +1,9 @@
 <?php
 
-namespace Framework\Support\Facades;
+namespace Lumin\Support\Facades;
 
 use Exception;
-use Framework\App;
+use Lumin\App;
 
 abstract class Facade {
     protected static array $instances = [];

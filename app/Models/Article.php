@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Framework\Databases\Model;
+use Lumin\Databases\Model;
 
 class Article extends Model {
     protected array $fillable = ['name'];

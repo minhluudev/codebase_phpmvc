@@ -1,6 +1,6 @@
 <?php
 
-use Framework\View;
+use Lumin\View;
 
 View::layout('layouts/main');
 View::section('title', 'About page');

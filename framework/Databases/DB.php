@@ -1,11 +1,11 @@
 <?php
 
-namespace Framework\Databases;
+namespace Lumin\Databases;
 
-use Framework\Databases\Interfaces\DBInterface;
-use Framework\Databases\Traits\MigrationTrait;
-use Framework\Helper;
-use Framework\Support\Facades\Log;
+use Lumin\Databases\Interfaces\DBInterface;
+use Lumin\Databases\Traits\MigrationTrait;
+use Lumin\Helper;
+use Lumin\Support\Facades\Log;
 use PDO;
 use PDOException;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Requests\Traits;
+namespace Lumin\Requests\Traits;
 
 trait ValidationFormTrait {
     private const RULE_REQUIRED = 'required';

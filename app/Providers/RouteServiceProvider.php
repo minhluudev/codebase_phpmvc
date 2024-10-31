@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
-use Framework\Helper;
-use Framework\ServiceProvider;
-use Framework\Support\Facades\Route;
+use Lumin\Helper;
+use Lumin\ServiceProvider;
+use Lumin\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider {
     public function register(): void {

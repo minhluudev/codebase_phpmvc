@@ -1,10 +1,10 @@
 <?php
 
-namespace Framework\Routing;
+namespace Lumin\Routing;
 
 use Exception;
-use Framework\App;
-use Framework\Routing\Interfaces\RouteResolveInterface;
+use Lumin\App;
+use Lumin\Routing\Interfaces\RouteResolveInterface;
 use ReflectionException;
 use ReflectionFunction;
 use ReflectionMethod;
@@ -15,7 +15,7 @@ use ReflectionMethod;
  * This class is responsible for resolving routes in the application.
  * It maps paths and middlewares to routes and resolves them based on the request method and URI.
  *
- * @package Framework\Routing
+ * @package Lumin\Routing
  */
 class RouteResolve implements RouteResolveInterface {
     public const GET    = 'GET';

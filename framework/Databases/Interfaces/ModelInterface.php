@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Databases\Interfaces;
+namespace Lumin\Databases\Interfaces;
 
 interface ModelInterface {
 

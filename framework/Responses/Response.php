@@ -1,8 +1,8 @@
 <?php
 
-namespace Framework\Responses;
+namespace Lumin\Responses;
 
-use Framework\Responses\Traits\HttpStatusCodeTrait;
+use Lumin\Responses\Traits\HttpStatusCodeTrait;
 
 class Response {
     use HttpStatusCodeTrait;

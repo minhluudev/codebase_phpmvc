@@ -3,7 +3,7 @@
 namespace App\HTTP\Controllers\Api;
 
 use App\Traits\ApiResponse;
-use Framework\Controller;
+use Lumin\Controller;
 
 class ApiController extends Controller {
     use ApiResponse;

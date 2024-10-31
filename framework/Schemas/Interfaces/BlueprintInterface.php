@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Schemas\Interfaces;
+namespace Lumin\Schemas\Interfaces;
 
 interface BlueprintInterface {
     public function getColumns(): array;

@@ -1,8 +1,8 @@
 <?php
 
-namespace Framework\Routing;
+namespace Lumin\Routing;
 
-use Framework\Routing\Interfaces\RouterInterface;
+use Lumin\Routing\Interfaces\RouterInterface;
 
 class Router extends RouteResolve implements RouterInterface {
     public function prefix(string $name, mixed $callback, array $middlewares = []): void {

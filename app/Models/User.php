@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Framework\Databases\Model;
-use Framework\Databases\Traits\SoftDeletes;
+use Lumin\Databases\Model;
+use Lumin\Databases\Traits\SoftDeletes;
 
 class User extends Model {
     use SoftDeletes;

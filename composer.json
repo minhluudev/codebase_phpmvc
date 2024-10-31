@@ -1,10 +1,10 @@
 {
   "name": "minh/php-mvc",
-  "description": "Build a PHP MVC Framework From Scratch",
+  "description": "Build a PHP MVC Lumin From Scratch",
   "autoload": {
     "psr-4": {
       "App\\": "./app",
-      "Framework\\": "./framework"
+      "Lumin\\": "./framework"
     }
   },
   "authors": [

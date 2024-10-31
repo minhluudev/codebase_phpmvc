@@ -1,16 +1,16 @@
 <?php
 
-namespace Framework;
+namespace Lumin;
 
 use Exception;
-use Framework\Databases\DB;
-use Framework\Log\LogManager;
-use Framework\Requests\Request;
-use Framework\Responses\Response;
-use Framework\Routing\Router;
-use Framework\Schemas\Schema;
-use Framework\Support\Facades\Log;
-use Framework\Support\Facades\Route;
+use Lumin\Databases\DB;
+use Lumin\Log\LogManager;
+use Lumin\Requests\Request;
+use Lumin\Responses\Response;
+use Lumin\Routing\Router;
+use Lumin\Schemas\Schema;
+use Lumin\Support\Facades\Log;
+use Lumin\Support\Facades\Route;
 
 class App {
     /**

@@ -5,7 +5,7 @@ namespace App\HTTP\Controllers\Web;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\User;
-use Framework\Controller;
+use Lumin\Controller;
 
 class HomeController extends Controller {
     public function index() {

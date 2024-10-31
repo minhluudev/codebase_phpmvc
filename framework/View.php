@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework;
+namespace Lumin;
 
 class View {
     private static string $layout         = '';

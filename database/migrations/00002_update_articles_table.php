@@ -1,8 +1,8 @@
 <?php
 
-use Framework\Databases\Migration;
-use Framework\Schemas\Blueprint;
-use Framework\Support\Facades\Schema;
+use Lumin\Databases\Migration;
+use Lumin\Schemas\Blueprint;
+use Lumin\Support\Facades\Schema;
 
 return new class extends Migration {
     public function up(): void {

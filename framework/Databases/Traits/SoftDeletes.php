@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Databases\Traits;
+namespace Lumin\Databases\Traits;
 
 trait SoftDeletes {
     public static function isCheckDeleted(): bool {

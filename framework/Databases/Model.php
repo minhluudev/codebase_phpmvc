@@ -1,11 +1,11 @@
 <?php
 
-namespace Framework\Databases;
+namespace Lumin\Databases;
 
-use Framework\App;
-use Framework\Databases\Interfaces\ModelInterface;
-use Framework\Databases\Traits\StaticModelTrait;
-use Framework\Helper;
+use Lumin\App;
+use Lumin\Databases\Interfaces\ModelInterface;
+use Lumin\Databases\Traits\StaticModelTrait;
+use Lumin\Helper;
 use PDO;
 
 class Model implements ModelInterface {

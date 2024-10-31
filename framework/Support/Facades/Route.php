@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Support\Facades;
+namespace Lumin\Support\Facades;
 
 /**
  * @method static void prefix(string $name, mixed $callback, array $middlewares = [])
@@ -10,7 +10,7 @@ namespace Framework\Support\Facades;
  * @method static void put(string $path, mixed $action, array $middlewares = [])
  * @method static void delete(string $path, mixed $action, array $middlewares = [])
  *
- * @see \Framework\Routing\Router
+ * @see \Lumin\Routing\Router
  */
 class Route extends Facade {
     protected static function getFacadeAccessor(): string {

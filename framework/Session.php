@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework;
+namespace Lumin;
 
 class Session {
     protected const FLASH_KEY = 'flash_messages';

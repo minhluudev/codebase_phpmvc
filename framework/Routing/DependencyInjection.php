@@ -1,8 +1,8 @@
 <?php
 
-namespace Framework\Routing;
+namespace Lumin\Routing;
 
-use Framework\Routing\Interfaces\DependencyInjectionInterface;
+use Lumin\Routing\Interfaces\DependencyInjectionInterface;
 use ReflectionClass;
 use ReflectionException;
 
@@ -11,7 +11,7 @@ use ReflectionException;
  *
  * This class is responsible for dependency injection.
  *
- * @package Framework\Routing
+ * @package Lumin\Routing
  */
 class DependencyInjection implements DependencyInjectionInterface {
     /**

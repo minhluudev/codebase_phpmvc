@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Databases;
+namespace Lumin\Databases;
 
 abstract class Migration {
     /**

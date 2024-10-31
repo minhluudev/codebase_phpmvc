@@ -3,7 +3,7 @@
 use App\HTTP\Controllers\Admin\OverviewController;
 use App\HTTP\Controllers\Web\AuthController;
 use App\HTTP\Controllers\Web\HomeController;
-use Framework\Support\Facades\Route;
+use Lumin\Support\Facades\Route;
 
 
 //// Web routes

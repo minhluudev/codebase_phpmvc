@@ -1,6 +1,6 @@
 <?php
 
-use Framework\View;
+use Lumin\View;
 
 ?>
 <!DOCTYPE html>

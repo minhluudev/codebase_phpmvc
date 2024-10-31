@@ -1,6 +1,6 @@
 <?php
 
 use App\HTTP\Controllers\Api\CategoryApiController;
-use Framework\Support\Facades\Route;
+use Lumin\Support\Facades\Route;
 
 Route::get('category', [CategoryApiController::class, 'index']);

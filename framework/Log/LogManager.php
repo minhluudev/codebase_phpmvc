@@ -1,9 +1,9 @@
 <?php
 
-namespace Framework\Log;
+namespace Lumin\Log;
 
-use Framework\Helper;
-use Framework\Log\Interfaces\LogManagerInterface;
+use Lumin\Helper;
+use Lumin\Log\Interfaces\LogManagerInterface;
 
 class LogManager implements LogManagerInterface {
     public function info($message): void {

@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\HTTP\Middlewares\AuthMiddleware;
-use Framework\ServiceProvider;
+use Lumin\ServiceProvider;
 
 class MiddlewareProvider extends ServiceProvider
 {

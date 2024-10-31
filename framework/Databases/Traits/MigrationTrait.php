@@ -1,10 +1,10 @@
 <?php
 
-namespace Framework\Databases\Traits;
+namespace Lumin\Databases\Traits;
 
 use DirectoryIterator;
-use Framework\Helper;
-use Framework\Support\Facades\Schema;
+use Lumin\Helper;
+use Lumin\Support\Facades\Schema;
 use PDO;
 use PDOException;
 
