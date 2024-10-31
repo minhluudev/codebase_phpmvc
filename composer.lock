@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f512d495e96a7e813329d67d596b62d8",
+    "content-hash": "16acb1d4c0002d8ef792db855b7214fa",
     "packages": [
         {
             "name": "graham-campbell/result-type",
@@ -67,6 +67,40 @@
                 }
             ],
             "time": "2024-07-20T21:45:45+00:00"
+        },
+        {
+            "name": "minhluu/lumin",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/minhluudev/lumin-core.git",
+                "reference": "47f5744d5d313463a0fa114040cbaf621dd5b39f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/minhluudev/lumin-core/zipball/47f5744d5d313463a0fa114040cbaf621dd5b39f",
+                "reference": "47f5744d5d313463a0fa114040cbaf621dd5b39f",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Lumin\\": "."
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Minh Luu",
+                    "email": "minhluuth@gmail.com"
+                }
+            ],
+            "description": "This framework is compact yet powerful.",
+            "support": {
+                "issues": "https://github.com/minhluudev/lumin-core/issues",
+                "source": "https://github.com/minhluudev/lumin-core/tree/v1.0.1"
+            },
+            "time": "2024-10-31T15:22:56+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -470,13 +504,10 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": {
-        "ext-pdo": "*",
-        "ext-http": "*"
-    },
-    "platform-dev": {},
+    "platform": [],
+    "platform-dev": [],
     "plugin-api-version": "2.6.0"
 }
