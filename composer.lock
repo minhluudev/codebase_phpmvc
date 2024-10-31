@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "16acb1d4c0002d8ef792db855b7214fa",
+    "content-hash": "cf3d220a8bb38e1bb37efadb458ff818",
     "packages": [
         {
             "name": "graham-campbell/result-type",
@@ -69,17 +69,17 @@
             "time": "2024-07-20T21:45:45+00:00"
         },
         {
-            "name": "minhluu/lumin",
-            "version": "v1.0.1",
+            "name": "minhluu/lumin-core",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/minhluudev/lumin-core.git",
-                "reference": "47f5744d5d313463a0fa114040cbaf621dd5b39f"
+                "reference": "1221a8f2d79113b4d7db8d663120410f7b41689f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minhluudev/lumin-core/zipball/47f5744d5d313463a0fa114040cbaf621dd5b39f",
-                "reference": "47f5744d5d313463a0fa114040cbaf621dd5b39f",
+                "url": "https://api.github.com/repos/minhluudev/lumin-core/zipball/1221a8f2d79113b4d7db8d663120410f7b41689f",
+                "reference": "1221a8f2d79113b4d7db8d663120410f7b41689f",
                 "shasum": ""
             },
             "type": "library",
@@ -98,9 +98,9 @@
             "description": "This framework is compact yet powerful.",
             "support": {
                 "issues": "https://github.com/minhluudev/lumin-core/issues",
-                "source": "https://github.com/minhluudev/lumin-core/tree/v1.0.1"
+                "source": "https://github.com/minhluudev/lumin-core/tree/v1.0.2"
             },
-            "time": "2024-10-31T15:22:56+00:00"
+            "time": "2024-10-31T15:28:00+00:00"
         },
         {
             "name": "phpoption/phpoption",
