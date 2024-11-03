@@ -1,0 +1,106 @@
+:root {
+  --main-color: rgb(15, 197, 243);
+  --heigh-input: 40px;
+  --border-radius: 5px;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f0f0;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+main > h1.title {
+  color: #333;
+}
+
+main > div.subtitle {
+  color: #666;
+}
+
+section {
+  background-color: #fff;
+  margin: 20px;
+  padding: 20px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 50%;
+}
+
+.flex {
+  display: flex;
+}
+
+.justify__content--center {
+  justify-content: center;
+}
+
+.align__item--center {
+  align-items: center;
+}
+
+form .form__item {
+  display: flex;
+  flex-direction: column;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+  height: var(--heigh-input);
+  border: 1px solid gray;
+  border-radius: 6px;
+  padding: 0 5px;
+  font-size: 14px;
+}
+
+input:focus,
+input:focus-visible {
+  border-color: var(--main-color);
+  outline: none;
+}
+
+button {
+  min-height: var(--heigh-input);
+  background-color: var(--main-color);
+  color: white;
+  border: none;
+  outline: none;
+  border-radius: var(--border-radius);
+  padding: 0 15px;
+  cursor: pointer;
+}
+
+.login__form__container {
+  width: 350px;
+}
+
+.message__error {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  position: relative;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+}
+
+@media (max-width: 768px) {
+  section {
+    width: 80%;
+  }
+
+  .login__form__container {
+    width: 80%;
+  }
+}

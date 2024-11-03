@@ -8,9 +8,8 @@ $dotenv = Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->safeLoad();
 
 try {
-    $app = new App(dirname(__DIR__));
-    $app->run();
+	$app = new App(dirname(__DIR__));
+	$app->run();
 } catch (Exception $e) {
-    echo $e->getMessage();
+	echo $e->getMessage();
 }
-

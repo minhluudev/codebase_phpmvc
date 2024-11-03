@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use Dotenv\Dotenv;
 use Lumin\App;
@@ -11,4 +11,3 @@ $dotenv->safeLoad();
 $app = new App(dirname(__DIR__));
 $app->boot();
 $app->db->applyMigrations();
-

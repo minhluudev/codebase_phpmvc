@@ -1,5 +1,6 @@
 <?php
 
+use App\HTTP\Controllers\Api\UserApiController;
 use Lumin\Support\Facades\Route;
 
-//Route::get('category', [CategoryApiController::class, 'index']);
+Route::get('user', [UserApiController::class, 'index']);
