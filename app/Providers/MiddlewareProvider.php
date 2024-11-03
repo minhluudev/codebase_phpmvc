@@ -7,5 +7,5 @@ use Lumin\ServiceProvider;
 
 class MiddlewareProvider extends ServiceProvider
 {
-    protected array $services = ['middleware:auth' => AuthMiddleware::class,];
+	protected array $services = ['middleware:auth' => AuthMiddleware::class,];
 }

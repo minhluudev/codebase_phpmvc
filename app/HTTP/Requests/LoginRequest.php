@@ -6,8 +6,8 @@ use Lumin\Requests\FormRequest;
 
 class LoginRequest extends FormRequest
 {
-    public function rules(): array
-    {
-        return ['email' => [['name' => 'required',]], 'password' => [['name' => 'required',]],];
-    }
+	public function rules(): array
+	{
+		return ['email' => [['name' => 'required',]], 'password' => [['name' => 'required',]],];
+	}
 }
